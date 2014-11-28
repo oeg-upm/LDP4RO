@@ -1,0 +1,65 @@
+.b-thumb {
+    float: left;
+    margin: 3px;
+    padding: 5px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .4);
+    background-color: #fff;
+}
+
+.b-thumb__del {
+    top: -6px;
+    right: -1px;
+    color: #FF0000;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 999;
+    position: absolute;
+    font-size: 20px;
+    -webkit-transition: opacity .1s ease-in;
+    -moz-transition: opacity .1s ease-in;
+    transition: opacity .1s ease-in;
+}
+
+.b-thumb:hover .b-thumb__del {
+    opacity: 1;
+}
+
+.b-thumb__rotate {
+    top: 40%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    margin: -16px 0 0 -16px;
+    position: absolute;
+    background: url('uploader/rotate.png');
+}
+
+.b-thumb__preview {
+    width: 80px;
+    height: 80px;
+    -webkit-transition: -webkit-transform .2s ease-in;
+    -moz-transition: -moz-transform .2s ease-in;
+    transition: transform .2s ease-in;
+}
+
+.b-thumb__preview__pic {
+    width: 100%;
+    height: 100%;
+    background: url('../images/file.png') 50% 50% no-repeat;
+}
+
+.b-thumb__name {
+    width: 80px;
+    overflow: hidden;
+    font-size: 12px;
+}
+
+.b-thumb__progress {
+    top: 75px;
+    left: 10px;
+    right: 10px;
+    position: absolute;
+}
