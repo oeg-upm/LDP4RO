@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app
+	metadata-complete="false"
+	version="3.0"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://java.sun.com/xml/ns/javaee 
+		http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	<display-name>Ontology to JSON-LD Context Application</display-name>
+	
+	<servlet>
+   		<servlet-name>FileUploaderServlet</servlet-name>
+   		<servlet-class>org.ldp4j.apps.ldp4ro.servlets.FileUploaderServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+   		<servlet-name>FileUploaderServlet</servlet-name>
+   		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>FilePublisherServlet</servlet-name>
+		<servlet-class>org.ldp4j.apps.ldp4ro.servlets.FilePublisherServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FilePublisherServlet</servlet-name>
+		<url-pattern>/files/*</url-pattern>
+	</servlet-mapping>
+
+	<listener>
+		<listener-class>org.ldp4j.apps.ldp4ro.listeners.ConfigManager</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.ldp4j.apps.ldp4ro.listeners.RequestLister</listener-class>
+	</listener>
+
+
+</web-app>
