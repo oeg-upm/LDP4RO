@@ -37,7 +37,7 @@ public class FilePublisherServlet extends HttpServlet {
 
         String requestURL = request.getRequestURL().toString();
 
-        logger.debug("Received a POST request on '{}'", requestURL);
+        logger.debug("Received a GET request on '{}'", requestURL);
 
         String fileName = requestURL.substring(requestURL.lastIndexOf('/'), requestURL.length());
         logger.debug("Extracted the file name '{}'", fileName);
