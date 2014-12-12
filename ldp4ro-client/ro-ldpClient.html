@@ -218,9 +218,11 @@
       previewNode.id = "";
       var previewTemplate = previewNode.parentNode.innerHTML;
       previewNode.parentNode.removeChild(previewNode);
+	  var uploadedFiles = [];
 
       var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: "http://www.torrentplease.com/dropzone.php", // Set the url
+        //url: "http://www.torrentplease.com/dropzone.php", // Set the url
+		url: "upload",
         thumbnailWidth: 80,
         thumbnailHeight: 80,
         parallelUploads: 20,
@@ -273,8 +275,9 @@
       
       //success: everything ok. Complete: wither ok or error
       myDropzone.on("success", function(file, responseText) {
-        alert("Response goes here: "+ responseText);
-        
+        //alert("Response goes here: "+ responseText);
+		//since the file has been accepted on the server, we save the response (which is the URI of the file)
+        uploadedFiles.push(responseText);
       });
 
       // Setup the buttons for all transfers
@@ -289,7 +292,12 @@
       };
       
       document.querySelector("#buttonForm").onclick = function() {
-        alert("TO DO");
+	    var text="";
+	    for	(index = 0; index < uploadedFiles.length; index++) {
+			text += uploadedFiles[index];
+		} 
+        alert("Will have to check if the uploaded files have been accepted. The files are: "+text);
+		
       };
     </script>
   </body>
