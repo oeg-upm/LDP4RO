@@ -270,6 +270,12 @@
                 
         }
       });
+      
+      //success: everything ok. Complete: wither ok or error
+      myDropzone.on("success", function(file, responseText) {
+        alert("Response goes here: "+ responseText);
+        
+      });
 
       // Setup the buttons for all transfers
       // The "add files" button doesn't need to be setup because the config
