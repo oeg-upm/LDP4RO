@@ -63,6 +63,7 @@ public class FileUploaderServlet extends HttpServlet {
         // checks if the request actually contains upload file
         if (!ServletFileUpload.isMultipartContent(request)) {
             // if not, send an error message
+            logger.error("Not a multipart request. The File Uploader only works with multipart requests ...");
             sendMessage("Not a multipart request", response);
             return;
         }
