@@ -134,17 +134,17 @@
 	
 	<div class="panel">
 	  <div class="panel-body">	  
-		  <form id="surveyForm" class="form-horizontal" role="form">
+		  <form id="surveyForm" class="form-horizontal" role="form" action="form2rdf" method="post">
                     
                     <div class="form-group custom-no-margin">
                       <label for="abstract">Abstract</label>
-                      <textarea rows="3" class="form-control" id="abstract" placeholder="Enter the abstract of your RO here"></textarea>
+                      <textarea rows="3" class="form-control" id="abstract" name="abstract" placeholder="Enter the abstract of your RO here"></textarea>
                     </div>
                       
                     <div class="form-group custom-no-margin">
                         <label class="col-sm-2 custom-left" for="Title" >Title</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="title" name="option[]" placeholder="Enter the title of your RO here">
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Enter the title of your RO here">
                         </div> 
                     </div>
                       
@@ -153,61 +153,70 @@
                       <div class="form-group custom-no-margin">
                         <label for="creatorName" class="col-sm-2 control-label">Author name</label>
                         <div class="col-sm-8">
-                          <input type="text" class="form-control" name="option[]" id="creatorName" placeholder="Insert the creator full name here">
+                          <input type="text" class="form-control" name="creatorName" id="creatorName" placeholder="Insert the creator full name here">
                         </div>
                       </div>
-                      
+
+                        <div class="form-group custom-no-margin">
+                            <label for="creatorURI" class="col-sm-2 control-label">Author URI</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="creatorURI" name="creatorURI[]" placeholder="Insert the creator's URI here">
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-default addCreatorURI"><i class="glyphicon glyphicon-plus"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                      <div class="form-group hide custom-no-margin" id="creatorURITemplate">
+                          <div class="col-sm-offset-2 col-sm-8">
+                              <input class="form-control" type="text" name="creatorURI[]" placeholder="Insert the creator's URI here"/>
+                          </div>
+                          <div class="col-sm-2">
+                              <button type="button" class="btn btn-default removeCreatorURI"><i class="fa fa-minus"></i></button>
+                          </div>
+                      </div>
+
                       <div class="form-group custom-no-margin">
-                        <label for="creatorURI" class="col-sm-2 control-label">Author URI</label>
-                        <div class="col-sm-8">
-                          <input type="text" class="form-control" id="creatorURI" placeholder="Insert the creator's URI here">
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-default addButton"><i class="glyphicon glyphicon-plus"></i></button>
-                        </div>
+                          <label class="col-sm-2 custom-left" for="date">Creation date</label>
+                          <div class="col-sm-8">
+                              <input type="text" class="form-control" id="date" name="date" placeholder="Insert the date of creation here (YYYY/MM/DD)">
+                          </div>
                       </div>
-                         
-                    </div>
-                      
-                    <div class="form-group custom-no-margin">
-                        <label class="col-sm-2 custom-left" for="date">Creation date</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="date" placeholder="Insert the date of creation here">
-                        </div> 
-                    </div> 
-                      
-                    <div class="form-group custom-no-margin">
-                        <label class="col-sm-2 custom-left">External URIs</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control"  placeholder="Insert a external resource to be aggregated here" />
-                        </div> 
-                       <div class="col-sm-2">
-                            <button type="button" class="btn btn-default addButton"><i class="fa fa-plus"></i></button>
-                            <!--<button type="button" class="btn btn-default addButton"><i class="glyphicon glyphicon-plus"></i></button>-->
-                        </div>
-                    </div>
-                    
-                    <div class="form-group hide custom-no-margin" id="optionTemplate">
-                        <div class="col-sm-offset-2 col-sm-8">
-                            <input class="form-control" type="text" placeholder="Insert a external resource to be aggregated here"/>
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-default removeButton"><i class="fa fa-minus"></i></button>
-                        </div>
-                    </div>
-                      
-                    <div class="form-group custom-no-margin">
-                        <label class="col-sm-2 custom-left" for="license">License</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" name="option[]" id="license" placeholder="Insert the URL of the license of the RO">
-                        </div> 
-                    </div>                      
-                    
-                    <div class="form-group custom-no-margin">
-                        <div class="col-sm-offset-4 ">
-                        <button type="submit" class="btn btn-default col-sm-4" id="buttonForm">Submit</button>
-                        </div>
-                    </div>
+
+                      <div class="form-group custom-no-margin">
+                          <label class="col-sm-2 custom-left">External URIs</label>
+                          <div class="col-sm-8">
+                              <input type="text" class="form-control"  id="externalURI" name="externalURI[]" placeholder="Insert a external resource to be aggregated here" />
+                          </div>
+                          <div class="col-sm-2">
+                              <button type="button" class="btn btn-default addExternalURI"><i class="fa fa-plus"></i></button>
+                              <!--<button type="button" class="btn btn-default addButton"><i class="glyphicon glyphicon-plus"></i></button>-->
+                          </div>
+                      </div>
+
+                      <div class="form-group hide custom-no-margin" id="externalURITemplate">
+                          <div class="col-sm-offset-2 col-sm-8">
+                              <input class="form-control" type="text" name="externalURI[]" placeholder="Insert a external resource to be aggregated here"/>
+                          </div>
+                          <div class="col-sm-2">
+                              <button type="button" class="btn btn-default removeExternalURI"><i class="fa fa-minus"></i></button>
+                          </div>
+                      </div>
+
+                      <div class="form-group custom-no-margin">
+                          <label class="col-sm-2 custom-left" for="license">License</label>
+                          <div class="col-sm-8">
+                              <input type="text" class="form-control" name="license" id="license" placeholder="Insert the URL of the license of the RO">
+                          </div>
+                      </div>
+
+                      <div class="form-group custom-no-margin">
+                          <div class="col-sm-offset-4 ">
+                              <button type="submit" class="btn btn-default col-sm-4" id="buttonForm">Submit</button>
+                          </div>
+                      </div>
                   </form>
             </div>
 	</div>
@@ -227,8 +236,8 @@
 	  var uploadedFiles = [];
 
       var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: "http://www.torrentplease.com/dropzone.php", // I leave this URL for testing
-	//	url: "upload",
+    //   url: "http://www.torrentplease.com/dropzone.php", // I leave this URL for testing
+		url: "upload",
         thumbnailWidth: 80,
         thumbnailHeight: 80,
         parallelUploads: 20,
@@ -301,8 +310,9 @@
 	    var text="";
 	    for	(index = 0; index < uploadedFiles.length; index++) {
 			text += uploadedFiles[index];
-		} 
+		}
         alert("Will have to check if the uploaded files have been accepted. The files are: "+text);
+          $("surveyFormt").submit();
 		
       };
     </script>
@@ -321,21 +331,43 @@ $(document).ready(function() {
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                question: {
+                'externalURI[]': {
                     validators: {
-                        notEmpty: {
-                            message: 'The question required and cannot be empty'
+                        uri: {
+                            message: 'The external URI is malformed'
                         }
                     }
                 },
-                'option[]': {
+                'creatorURI[]': {
                     validators: {
                         notEmpty: {
-                            message: 'The option required and cannot be empty'
+                            message: 'A creator URI is required and cannot be empty'
                         },
                         stringLength: {
                             max: 100,
                             message: 'The option must be less than 100 characters long'
+                        },
+                        uri: {
+                            message: 'The creator URI is malformed'
+                        }
+                    }
+                }, 'license': {
+                    validators: {
+                        uri: {
+                            message: 'The license URI is malformed'
+                        }
+                    }
+                }, 'title': {
+                    validators: {
+                        notEmpty: {
+                            message: 'The title is required and cannot be empty'
+                        }
+                    }
+                },'date': {
+                    validators: {
+                        date: {
+                            format: 'YYYY/MM/DD',
+                            message: 'The date is not valid. Please use the format YYYY/MM/DD'
                         }
                     }
                 }
@@ -343,23 +375,23 @@ $(document).ready(function() {
         })
 
         // Add button click handler
-        .on('click', '.addButton', function() {
-            var $template = $('#optionTemplate'),
+        .on('click', '.addCreatorURI', function() {
+            var $template = $('#creatorURITemplate'),
                 $clone    = $template
                                 .clone()
                                 .removeClass('hide')
                                 .removeAttr('id')
                                 .insertBefore($template),
-                $option   = $clone.find('[name="option[]"]');
+                $option   = $clone.find('[name="creatorURI[]"]');
 
             // Add new field
             $('#surveyForm').bootstrapValidator('addField', $option);
         })
 
         // Remove button click handler
-        .on('click', '.removeButton', function() {
+        .on('click', '.removeCreatorURI', function() {
             var $row    = $(this).parents('.form-group'),
-                $option = $row.find('[name="option[]"]');
+                $option = $row.find('[name="creatorURI[]"]');
 
             // Remove element containing the option
             $row.remove();
@@ -374,21 +406,60 @@ $(document).ready(function() {
             // data.element --> The new field element
             // data.options --> The new field options
 
-            if (data.field === 'option[]') {
-                if ($('#surveyForm').find(':visible[name="option[]"]').length >= MAX_OPTIONS) {
+            if (data.field === 'creatorURI[]') {
+                if ($('#surveyForm').find(':visible[name="creatorURI[]"]').length >= MAX_OPTIONS) {
                     $('#surveyForm').find('.addButton').attr('disabled', 'disabled');
+                }
+            } else if (data.field === 'externalURI[]') {
+                if ($('#surveyForm').find(':visible[name="externalURI[]"]').length >= MAX_OPTIONS) {
+                    $('#surveyForm').find('.addExternalURI').attr('disabled', 'disabled');
                 }
             }
         })
 
         // Called after removing the field
         .on('removed.field.bv', function(e, data) {
-           if (data.field === 'option[]') {
-                if ($('#surveyForm').find(':visible[name="option[]"]').length < MAX_OPTIONS) {
+           if (data.field === 'creatorURI[]') {
+                if ($('#surveyForm').find(':visible[name="creatorURI[]"]').length < MAX_OPTIONS) {
                     $('#surveyForm').find('.addButton').removeAttr('disabled');
                 }
-            }
-        });
+            } else if (data.field === 'externalURI[]') {
+               if ($('#surveyForm').find(':visible[name="externalURI[]"]').length < MAX_OPTIONS) {
+                   $('#surveyForm').find('.addExternalURI').attr('disabled', 'disabled');
+               }
+           }
+        })
+
+       //TODO these functions can be improved rather than repeating the whole thing. I just repeat them for simplicity.
+       //Dani, please take a look.
+
+        // Add button click handler
+        .on('click', '.addExternalURI', function() {
+            var $template = $('#externalURITemplate'),
+                    $clone    = $template
+                            .clone()
+                            .removeClass('hide')
+                            .removeAttr('id')
+                            .insertBefore($template),
+                    $option   = $clone.find('[name="externalURI[]"]');
+
+            // Add new field
+            $('#surveyForm').bootstrapValidator('addField', $option);
+        })
+
+            // Remove button click handler
+                .on('click', '.removeExternalURI', function() {
+                    var $row    = $(this).parents('.form-group'),
+                            $option = $row.find('[name="externalURI[]"]');
+
+                    // Remove element containing the option
+                    $row.remove();
+
+                    // Remove field
+                    $('#surveyForm').bootstrapValidator('removeField', $option);
+                });
+
+
 });
 
 
