@@ -312,6 +312,10 @@
 			text += uploadedFiles[index];
 		}
         alert("Will have to check if the uploaded files have been accepted. The files are: "+text);
+
+        //Removing the templates to avoid recieving empty values
+        $('#creatorURITemplate').remove();
+          $('#externalURITemplate').remove();
           $("surveyFormt").submit();
 		
       };

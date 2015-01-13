@@ -31,11 +31,22 @@
 		<url-pattern>/files/*</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>Form2RDFServlet</servlet-name>
+		<servlet-class>org.ldp4j.apps.ldp4ro.servlets.Form2RDFServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Form2RDFServlet</servlet-name>
+		<url-pattern>/form2rdf</url-pattern>
+	</servlet-mapping>
+
+
 	<listener>
 		<listener-class>org.ldp4j.apps.ldp4ro.listeners.ConfigManager</listener-class>
 	</listener>
 	<listener>
-		<listener-class>org.ldp4j.apps.ldp4ro.listeners.RequestLister</listener-class>
+		<listener-class>org.ldp4j.apps.ldp4ro.listeners.RequestListener</listener-class>
 	</listener>
 
 

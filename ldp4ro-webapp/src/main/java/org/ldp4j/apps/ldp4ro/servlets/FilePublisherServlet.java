@@ -21,19 +21,27 @@ import org.ldp4j.apps.ldp4ro.listeners.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 
+/***
+ * This servlet serves the uploaded files from the file system.
+ */
 public class FilePublisherServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(FilePublisherServlet.class);
 
+    /***
+     *
+     * @param request The http request. The last part of the request URI acts as the identifier of the file.
+     * @param response The binary representation of the requested file.
+     * @throws IOException if there is an error file reading the requested file
+     */
     protected void doGet(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
+                          HttpServletResponse response) throws IOException {
 
         String requestURL = request.getRequestURL().toString();
 
@@ -45,6 +53,8 @@ public class FilePublisherServlet extends HttpServlet {
         File file = new File(ConfigManager.getFileUploadDir().getAbsolutePath() + File.separator + fileName);
 
         logger.debug("Resolved the absolute path '{}'", file.getAbsolutePath());
+
+        //TODO we should try to find a way to set the content type properly
 
         if(file.exists()){
             FileUtils.copyFile(file, response.getOutputStream());
