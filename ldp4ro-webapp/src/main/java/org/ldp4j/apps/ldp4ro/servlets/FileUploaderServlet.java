@@ -134,7 +134,7 @@ public class FileUploaderServlet extends HttpServlet {
     private void sendMessage(String msg, HttpServletResponse response) throws IOException {
 
         PrintWriter writer = response.getWriter();
-        writer.println(msg);
+        writer.print(msg);
         writer.flush();
 
     }
