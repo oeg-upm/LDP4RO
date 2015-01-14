@@ -17,7 +17,7 @@
 package org.ldp4j.apps.ldp4ro.frontend;
 
 public enum RoFormElement {
-    ABSTRACT, TITLE, CREATOR_NAME, CREATOR_URI, LICENSE, EXTENRAL_URI, DATE;
+    ABSTRACT, TITLE, CREATOR_NAME, CREATOR_URI, EXTERNAL_URI, RESOURCE_URI, DATE, LICENSE;
 
     public static RoFormElement fromString(String string) {
         if ("abstract".equals(string)) {
@@ -29,7 +29,9 @@ public enum RoFormElement {
         } else if ("creatorURI[]".equals(string)) {
             return RoFormElement.CREATOR_URI;
         } else if ("externalURI[]".equals(string)) {
-            return RoFormElement.EXTENRAL_URI;
+            return RoFormElement.EXTERNAL_URI;
+        } else if ("resourceURI[]".equals(string)){
+            return RoFormElement.RESOURCE_URI;
         } else if ("date".equals(string)) {
             return RoFormElement.DATE;
         } else if ("license".equals(string)) {

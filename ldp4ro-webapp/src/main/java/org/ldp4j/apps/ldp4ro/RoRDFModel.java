@@ -67,7 +67,10 @@ public class RoRDFModel {
                 case CREATOR_URI:
                     generateCreatorURIs(values);
                     break;
-                case EXTENRAL_URI:
+                case EXTERNAL_URI:
+                    generateExternalURIs(values);
+                    break;
+                case RESOURCE_URI:
                     generateExternalURIs(values);
                     break;
                 case LICENSE:
