@@ -56,6 +56,12 @@ public class Form2RDFServlet extends HttpServlet {
 
         model.write(System.out, "TURTLE");
 
+        response.setHeader("Location", "http://example.org/dummy");
+        response.getWriter().write("http://example.org/dummy");
+
+
+
+
     }
 
 }
