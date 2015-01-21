@@ -126,7 +126,7 @@
        
           <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
             <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-          </div>
+          </div>    
         <!--</span>-->
       </div>
 
@@ -150,17 +150,17 @@
                       
                     <div class="form-group custom-no-margin">
                       <label>Creators (name and URI)</label>
-                      <div class="form-group custom-no-margin">
-                        <label for="creatorName" class="col-sm-2 control-label">Author name</label>
-                        <div class="col-sm-8">
-                          <input type="text" class="form-control" name="creatorName" id="creatorName" placeholder="Insert the creator full name here">
+                        <div class="form-group custom-no-margin">
+                          <label for="creatorName" class="col-sm-2 control-label">Author name</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="creatorName" name="creatorName[]" placeholder="Insert the creator full name here">
+                          </div>
                         </div>
-                      </div>
 
                         <div class="form-group custom-no-margin">
                             <label for="creatorURI" class="col-sm-2 control-label">Author URI</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="creatorURI" name="creatorURI[]" placeholder="Insert the creator's URI here">
+                                <input type="text" class="form-control" id="creatorURI"  name="creatorURI[]" placeholder="Insert the creator's URI here">
                             </div>
                             <div class="col-sm-2">
                                 <button type="button" class="btn btn-default addCreatorURI"><i class="glyphicon glyphicon-plus"></i></button>
@@ -168,15 +168,25 @@
                         </div>
 
                     </div>
-
-                      <div class="form-group hide custom-no-margin" id="creatorURITemplate">
-                          <div class="col-sm-offset-2 col-sm-8">
-                              <input class="form-control" type="text" name="creatorURI[]" placeholder="Insert the creator's URI here"/>
-                          </div>
-                          <div class="col-sm-2">
-                              <button type="button" class="btn btn-default removeCreatorURI"><i class="fa fa-minus"></i></button>
-                          </div>
-                      </div>
+                      
+                    <div class="form-group hide custom-no-margin" id="creatorURITemplate">
+                        <div class="form-group custom-no-margin">
+                          <label class="col-sm-2 control-label">Author name</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control"  name="creatorName[]" placeholder="Insert the creator full name here">
+                          </div>                          
+                        </div>  
+                          
+                        <div class="form-group custom-no-margin">
+                            <label  class="col-sm-2 control-label">Author URI</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"  name="creatorURI[]" placeholder="Insert the creator's URI here">
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-default removeCreatorURI"><i class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+                    </div>    
 
                       <div class="form-group custom-no-margin">
                           <label class="col-sm-2 custom-left" for="date">Creation date</label>
@@ -236,7 +246,7 @@
 	  var uploadedFiles = [];
 
       var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-    //   url: "http://www.torrentplease.com/dropzone.php", // I leave this URL for testing
+       //url: "http://www.torrentplease.com/dropzone.php", // I leave this URL for testing
 		url: "upload",
         thumbnailWidth: 80,
         thumbnailHeight: 80,
@@ -288,10 +298,10 @@
         }
       });
       
-      //success: everything ok. Complete: wither ok or error
+      //success: everything ok. Complete: wether ok or error
       myDropzone.on("success", function(file, responseText) {
         //alert("Response goes here: "+ responseText);
-		//since the file has been accepted on the server, we save the response (which is the URI of the file)
+	//since the file has been accepted on the server, we save the response (which is the URI of the file)
         uploadedFiles.push(responseText);
       });
 
@@ -307,18 +317,17 @@
       };
       
       document.querySelector("#buttonForm").onclick = function() {
-	    var text="";
+	 //   var text="";
 	    for	(index = 0; index < uploadedFiles.length; index++) {
-			text += uploadedFiles[index];
+	//		text += uploadedFiles[index];
 
             // Adding the uploaded file URIs to the form
             $('<input />').attr('type', 'hidden')
                     .attr('name', "resourceURI[]")
                     .attr('value', uploadedFiles[index])
                     .appendTo('#surveyForm');
-
-		}
-        alert("Will have to check if the uploaded files have been accepted. The files are: "+text);
+            }
+        //alert("Will have to check if the uploaded files have been accepted. The files are: "+text);
 
         //Removing the templates to avoid recieving empty values
         $('#creatorURITemplate').remove();
@@ -349,6 +358,17 @@ $(document).ready(function() {
                         }
                     }
                 },
+//                'creatorName[]': {
+//                    validators: {
+//                        notEmpty: {
+//                            message: 'A creator URI is required and cannot be empty'
+//                        },
+//                        stringLength: {
+//                            max: 100,
+//                            message: 'The option must be less than 100 characters long'
+//                        }
+//                    }
+//                },
                 'creatorURI[]': {
                     validators: {
                         notEmpty: {
@@ -419,7 +439,7 @@ $(document).ready(function() {
 
             if (data.field === 'creatorURI[]') {
                 if ($('#surveyForm').find(':visible[name="creatorURI[]"]').length >= MAX_OPTIONS) {
-                    $('#surveyForm').find('.addButton').attr('disabled', 'disabled');
+                    $('#surveyForm').find('.addCreatorURI').attr('disabled', 'disabled');
                 }
             } else if (data.field === 'externalURI[]') {
                 if ($('#surveyForm').find(':visible[name="externalURI[]"]').length >= MAX_OPTIONS) {
@@ -432,17 +452,18 @@ $(document).ready(function() {
         .on('removed.field.bv', function(e, data) {
            if (data.field === 'creatorURI[]') {
                 if ($('#surveyForm').find(':visible[name="creatorURI[]"]').length < MAX_OPTIONS) {
-                    $('#surveyForm').find('.addButton').removeAttr('disabled');
+                    $('#surveyForm').find('.addCreatorURI').removeAttr('disabled');
                 }
             } else if (data.field === 'externalURI[]') {
                if ($('#surveyForm').find(':visible[name="externalURI[]"]').length < MAX_OPTIONS) {
-                   $('#surveyForm').find('.addExternalURI').attr('disabled', 'disabled');
+                    $('#surveyForm').find('.addExternalURI').removeAttr('disabled');
+                //$('#surveyForm').find('.addExternalURI').attr('disabled', 'disabled');
                }
            }
         })
 
        //TODO these functions can be improved rather than repeating the whole thing. I just repeat them for simplicity.
-       //Dani, please take a look.
+       //Dani, please take a look. @Nandana: Naaah if it works, don't touch it ;)
 
         // Add button click handler
         .on('click', '.addExternalURI', function() {
@@ -458,17 +479,17 @@ $(document).ready(function() {
             $('#surveyForm').bootstrapValidator('addField', $option);
         })
 
-            // Remove button click handler
-                .on('click', '.removeExternalURI', function() {
-                    var $row    = $(this).parents('.form-group'),
-                            $option = $row.find('[name="externalURI[]"]');
+        // Remove button click handler
+        .on('click', '.removeExternalURI', function() {
+            var $row    = $(this).parents('.form-group'),
+                    $option = $row.find('[name="externalURI[]"]');
 
-                    // Remove element containing the option
-                    $row.remove();
+            // Remove element containing the option
+            $row.remove();
 
-                    // Remove field
-                    $('#surveyForm').bootstrapValidator('removeField', $option);
-                });
+            // Remove field
+            $('#surveyForm').bootstrapValidator('removeField', $option);
+        });
 
 
 });
