@@ -17,6 +17,12 @@
 package org.ldp4j.apps.ldp4ro.servlets;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.ldp4j.apps.ldp4ro.RoRDFModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +31,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
@@ -54,13 +61,40 @@ public class Form2RDFServlet extends HttpServlet {
 
         Model model = ro.process();
 
-        model.write(System.out, "TURTLE");
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        model.write(os, "TURTLE");
+        String roString = os.toString();
 
-        response.setHeader("Location", "http://example.org/dummy");
-        response.getWriter().write("http://example.org/dummy");
+        logger.debug("Form data is converted to RDF ... \n{}", roString);
 
 
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        HttpPost post = new HttpPost("http://localhost:8080/ldp4j/ldp-bc/");
 
+        StringEntity body = new StringEntity(roString);
+        body.setContentType("text/turtle");
+        post.setEntity(body);
+
+        HttpResponse ldpResponse = httpclient.execute(post);
+
+        try {
+            int statusCode = ldpResponse.getStatusLine().getStatusCode();
+            logger.debug("LDP server responded with {} {}", statusCode,
+                    ldpResponse.getStatusLine().getReasonPhrase());
+
+            if(statusCode == 201 && ldpResponse.getFirstHeader("Location") != null) {
+                String location = ldpResponse.getFirstHeader("Location").getValue();
+                logger.debug("URI of the newly created LDPR - {}", location);
+                response.setHeader("Location", location);
+                response.getWriter().write(location);
+            } else {
+                logger.error("An error occurred while creating the RO. {} {}", statusCode,
+                        ldpResponse.getStatusLine().getReasonPhrase());
+            }
+
+        } finally {
+            post.releaseConnection();
+        }
 
     }
 

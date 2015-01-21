@@ -24,7 +24,7 @@ public enum RoFormElement {
             return RoFormElement.ABSTRACT;
         } else if ("title".equals(string)) {
             return RoFormElement.TITLE;
-        } else if ("creatorName".equals(string)) {
+        } else if ("creatorName[]".equals(string)) {
             return RoFormElement.CREATOR_NAME;
         } else if ("creatorURI[]".equals(string)) {
             return RoFormElement.CREATOR_URI;

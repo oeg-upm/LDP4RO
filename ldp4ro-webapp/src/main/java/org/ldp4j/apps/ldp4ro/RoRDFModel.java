@@ -16,10 +16,10 @@
 
 package org.ldp4j.apps.ldp4ro;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
+import com.google.common.base.Joiner;
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.rdf.model.*;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.RDF;
 import org.ldp4j.apps.ldp4ro.frontend.RoFormElement;
@@ -28,6 +28,8 @@ import org.ldp4j.apps.ldp4ro.vocab.RO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class RoRDFModel {
@@ -40,6 +42,9 @@ public class RoRDFModel {
 
     Map<String, String[]> parameterMap;
 
+    String[] authorNames;
+
+    String[] authorURIs;
 
     public RoRDFModel(Map<String, String[]> parameterMap) {
         this.parameterMap = parameterMap;
@@ -64,8 +69,16 @@ public class RoRDFModel {
                 case TITLE:
                     generateTitle(values);
                     break;
+                case ABSTRACT:
+                    generateAbstract(values);
+                case CREATOR_NAME:
+                    authorNames = values;
+                    break;
                 case CREATOR_URI:
-                    generateCreatorURIs(values);
+                    authorURIs = values;
+                    break;
+                case DATE:
+                    generateDate(values);
                     break;
                 case EXTERNAL_URI:
                     generateExternalURIs(values);
@@ -80,6 +93,8 @@ public class RoRDFModel {
             }
 
         }
+
+        generateAuthors();
 
         return model;
 
@@ -114,12 +129,25 @@ public class RoRDFModel {
 
     }
 
-    private void generateCreatorURIs(String[] creatorURIs){
+    private void generateAbstract(String[] abstract_) {
+        if (abstract_.length > 0) {
+            ro.addProperty(DCTerms.abstract_, abstract_[0]);
+        }
+    }
 
-        for (String uri : creatorURIs) {
-            if (uri != null && !"".equals(uri)) {
-                ro.addProperty(DCTerms.creator, uri);
-            }
+    private void generateAuthors(){
+
+        if(authorNames == null || authorURIs == null || authorNames.length != authorURIs.length){
+            throw new IllegalArgumentException("Author names and author URIs do not match. " +
+                    Joiner.on(",").join(authorNames) + Joiner.on(",").join(authorURIs));
+        }
+
+        for (int i = 0; i < authorNames.length; i++) {
+            Resource author = model.createResource();
+            author.addProperty(RDF.type, DCTerms.Agent);
+            author.addLiteral(FOAF.name, authorNames[i]);
+            author.addProperty(FOAF.homepage,  model.createResource(authorURIs[i]));
+            ro.addProperty(DCTerms.creator, author);
         }
 
     }
@@ -140,6 +168,14 @@ public class RoRDFModel {
             }
         }
 
+    }
+
+    private void generateDate(String[] date){
+        if (date.length == 1) {
+            ro.addLiteral(DCTerms.created, ResourceFactory.createTypedLiteral(date[0], XSDDatatype.XSDdate));
+        } else if (date.length > 0) {
+            throw new IllegalArgumentException("There must zero or one date. Multiple dates found.");
+        }
     }
 
 
