@@ -39,7 +39,7 @@
       <div>        
         <h3 class="text-muted">Success</h3>
       </div>
-	  <div class="alert alert-success role="alert">
+	  <div class="alert alert-success" role="alert">
 		Your Research Object was created successfully
 	  </div>
 	
@@ -51,8 +51,8 @@
 			   <h3> <a href="<%= request.getAttribute("newURI")%>  "><%= request.getAttribute("newURI") %></a></h3>
 			  <p>Now you can</p>
 			  <ul>
-				<li><a href="">Navigate through the contents of the Research Object (this will have a link to the appropriate JSP)</li>
-				<li><a href="">Browse the full list of available Research Objects</li>
+                              <li><a href="">Navigate through the contents of the Research Object (this will have a link to the appropriate JSP)</a></li>
+                              <li><a href="">Browse the full list of available Research Objects</a></li>
 			  </ul>
 			  
       </div>
