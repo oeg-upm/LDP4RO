@@ -29,9 +29,15 @@ public class ORE {
     /** <p>The namespace of the vocabulary as a string</p> */
     public static final String NS = "http://www.openarchives.org/ore/terms/";
 
+    /** <p>A set of related resources (Aggregated Resources), grouped together such that the set can be treated as a single resource. This is the entity described within the ORE interoperability framework by a Resource Map. </p> */
     public static final Resource Aggregation = m_model.createResource( "http://www.openarchives.org/ore/terms/Aggregation" );
 
+    /** <p> A description of an Aggregation according to the OAI-ORE data model. Resource Maps are RDF graphs, and are serialised to a machine readable format according to the implementation guidelines. </p> */
+    public static final Resource ResourceMap = m_model.createResource( "http://www.openarchives.org/ore/terms/ResourceMap" );
+
     public static final Property aggregates = m_model.createProperty( "http://www.openarchives.org/ore/terms/aggregates" );
+
+    public static final Property isDescribedBy = m_model.createProperty( "http://www.openarchives.org/ore/terms/isDescribedBy" );
 
 
 }

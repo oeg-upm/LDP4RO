@@ -23,6 +23,7 @@ import com.hp.hpl.jena.sparql.vocabulary.FOAF;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.RDF;
 import org.ldp4j.apps.ldp4ro.frontend.RoFormElement;
+import org.ldp4j.apps.ldp4ro.vocab.LDP;
 import org.ldp4j.apps.ldp4ro.vocab.ORE;
 import org.ldp4j.apps.ldp4ro.vocab.RO;
 import org.slf4j.Logger;
@@ -108,10 +109,22 @@ public class RoRDFModel {
         model.setNsPrefix("ore", "http://www.openarchives.org/ore/terms/");
         model.setNsPrefix("ro", "http://purl.org/wf4ever/ro#");
         model.setNsPrefix("xhv", "http://www.w3.org/1999/xhtml/vocab#");
+        model.setNsPrefix("ldp", LDP.NS);
+        model.setNsPrefix("foaf", FOAF.NS);
 
-        ro = model.createResource("");
+
+        Resource rm = model.createResource("");
+        rm.addProperty(RDF.type, ORE.ResourceMap);
+
+        ro = model.createResource("#agr");
         ro.addProperty(RDF.type, RO.ResearchObject);
         ro.addProperty(RDF.type, ORE.Aggregation);
+        ro.addProperty(RDF.type, LDP.Container);
+        ro.addProperty(RDF.type, LDP.DirectContainer);
+        ro.addProperty(LDP.membershipResource, ro);
+        ro.addProperty(LDP.hasMemberRelation, ORE.aggregates);
+        ro.addProperty(ORE.isDescribedBy, rm);
+
 
         logger.trace("Created the basic model and the RO resource");
 
