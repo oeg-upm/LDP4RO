@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
   <!--
@@ -47,7 +48,7 @@
               <p>
 			  The URI for your Research Object is:
 			  </p>
-			   <h3> <a href="">http://example.com/URI_goes_here</a></h3>
+			   <h3> <a href="<%= request.getAttribute("newURI")%>  "><%= request.getAttribute("newURI") %></a></h3>
 			  <p>Now you can</p>
 			  <ul>
 				<li><a href="">Navigate through the contents of the Research Object (this will have a link to the appropriate JSP)</li>

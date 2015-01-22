@@ -27,6 +27,7 @@ import org.ldp4j.apps.ldp4ro.RoRDFModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -85,8 +86,12 @@ public class Form2RDFServlet extends HttpServlet {
             if(statusCode == 201 && ldpResponse.getFirstHeader("Location") != null) {
                 String location = ldpResponse.getFirstHeader("Location").getValue();
                 logger.debug("URI of the newly created LDPR - {}", location);
-                response.setHeader("Location", location);
-                response.getWriter().write(location);
+
+                request.setAttribute("newURI", location);
+
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/roCreated.jsp");
+                dispatcher.forward(request, response);
+
             } else {
                 logger.error("An error occurred while creating the RO. {} {}", statusCode,
                         ldpResponse.getStatusLine().getReasonPhrase());
