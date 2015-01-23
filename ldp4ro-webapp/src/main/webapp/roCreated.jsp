@@ -35,7 +35,18 @@
    <body>
 
     <div class="container">
-      
+      <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <a class="navbar-brand" href="index.html">Create ROs!</a>
+              <ul class="nav navbar-nav">
+				  <li><a href="#">Browse ROs</a></li>
+                  <li><a href="about.html">About</a></li>
+              </ul>
+            </div>
+        </div>
+      </nav>
       <div>        
         <h3 class="text-muted">Success</h3>
       </div>
@@ -51,8 +62,8 @@
 			   <h3> <a href="<%= request.getAttribute("newURI")%>  "><%= request.getAttribute("newURI") %></a></h3>
 			  <p>Now you can</p>
 			  <ul>
-                              <li><a href="">Navigate through the contents of the Research Object (this will have a link to the appropriate JSP)</a></li>
-                              <li><a href="">Browse the full list of available Research Objects</a></li>
+                              <li><a href="">Navigate through the contents of the Research Object (TO DO)</a></li>
+                              <li><a href="roVisualizer.html">Browse the full list of available Research Objects</a></li>
 			  </ul>
 			  
       </div>
