@@ -1,8 +1,9 @@
 LDP4RO
 ======
 Creators: Nandana Mihindukulasooriya, Daniel Garijo
+Contributors: Oscar Corcho
 
-Project to create and browse Research Objects following the LDP model and using LDP4J.
+Project designed to create and browse Research Objects following the LDP protocol and using LDP4J (http://www.ldp4j.org/#/).
 The project consists on a client for easily creating ROs and a connector to handle the requests to LDP.
 This is a work in progress.
 
