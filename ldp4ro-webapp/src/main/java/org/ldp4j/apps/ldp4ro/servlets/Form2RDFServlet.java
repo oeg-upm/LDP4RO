@@ -71,6 +71,7 @@ public class Form2RDFServlet extends HttpServlet {
 
         DefaultHttpClient httpclient = new DefaultHttpClient();
         HttpPost post = new HttpPost("http://localhost:8080/ldp4j/ldp-bc/");
+        //HttpPost post = new HttpPost("http://linkeddata4.dia.fi.upm.es:8088/ldp4j/ldp-bc/");
 
         StringEntity body = new StringEntity(roString);
         body.setContentType("text/turtle");
