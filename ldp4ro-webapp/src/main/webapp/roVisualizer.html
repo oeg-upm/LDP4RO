@@ -46,6 +46,7 @@
 			* Thanks to Daniel Vila for his help
 			**/
 			function loadROs() {
+                                //var endpointURI ="http://linkeddata4.dia.fi.upm.es:8088/ldp4j/ldp-bc/";
 				var endpointURI ="http://localhost:8080/ldp4j/ldp-bc/";
 				// An ajax request that requests the above URI and parses the response. 
 				$.ajax( {
@@ -66,9 +67,10 @@
 			/**
 			* Function that loads the metadata of the Research Objects and builds the html
 			**/
-			var _researchObjects;
+			//var _researchObjects;
+			var _researchObjectHtml='';//variable for storing incrementally the html of the table
 			function loadROMetadata(ros) {
-				_researchObjects=[];
+				//_researchObjects=[];
 				for(var i = 0; i < ros.length; i++) {
 					var currentRO = ros[i];
 					//load title, authors, date and license
@@ -81,13 +83,17 @@
 						var ro = new Object();
 						var agents = [];
 						for(var j=0; j<returnedObjects.length; j++){
-							//if it is an RO, get the metadata. Otherwise push in the author array	
+							//if it is an RO, get the metadata. Otherwise push in the author array.
+							//since ROs are defined with 3 types, I test any of the three
 							if(returnedObjects[j]['@type'] instanceof Array && 
 								(returnedObjects[j]['@type'][0]=='http://www.openarchives.org/ore/terms/Aggregation') ||
-								(returnedObjects[j]['@type'][0]=='http://purl.org/wf4ever/ro#ResearchObject')){
+								(returnedObjects[j]['@type'][0]=='http://purl.org/wf4ever/ro#ResearchObject') ||
+								(returnedObjects[j]['@type'][0]=='http://www.w3.org/ns/ldp#Container'))
+								{
 								ro.title = returnedObjects[j].title;//
 								ro.date = returnedObjects[j].created;
 								ro.license = returnedObjects[j].license;
+								ro.uri = returnedObjects[j]['@id'];
 								//console.log('Found RO: '+ro.title);
 							}								//if it's an agent, add it as creator
 							if(returnedObjects[j]['@type']=='http://purl.org/dc/terms/Agent'){									
@@ -96,17 +102,13 @@
 								if(returnedObjects[j].name)	ag.name = returnedObjects[j].name;
 								console.log(ag.url+' ');
 								agents.push(ag);
-							}
+							}							
 							//console.log(returnedObjects[1].title);														
 						}
-						ro.uri = currentRO;
+						console.log(currentRO);
 						ro.agents = agents;
-						_researchObjects.push(ro);
-						//we update the list when we receive all the responses
-						if(ros.length == _researchObjects.length){
-							updateListMetadata();
-						}
-						
+						loadRow(ro);
+						updateTable();
 					}
 				}); 
 				}
@@ -114,16 +116,10 @@
 				
 			}
 			
-			/**
-			*update the html with the metadata*
-			**/
-			function updateListMetadata(){
-				console.log(_researchObjects);
-				//iterate through ROs and paint the metadata
-				//var html="<ul>";
-				//for(var i = 0; i<_researchObjects.length; i++){
-				//	html+='<li>'+_researchObjects[i].title+'</li>';
-				//}				
+			/*
+			Function that updates the html variable for the table asynchronously
+			*/
+			function updateTable(){
 				var html='<table class="col-sm-12">'+
 					'<thead>'+
 					'	<tr>'+
@@ -131,20 +127,26 @@
 					'		<th data-field="name" class="col-sm-2">Author</th>'+
 					'		<th data-field="price" class="col-sm-3">Date</th>'+
 					'		<th data-field="license" class="col-sm-3">License</th>'+
-					'	</tr>';
-				for(var i = 0; i<_researchObjects.length; i++){
-					html+='<tr>';
-					html+='<td><a href='+_researchObjects[i].uri+'>'+_researchObjects[i].title+'</a></td>';
-					html+='<td>'+_researchObjects[i].agents[0].url+'</td>';
-					html+='<td>'+_researchObjects[i].date+'</td>';
-					html+='<td>'+_researchObjects[i].license+'</td>';
-					html+='</tr>';
-				}
-				html+=	'</thead>'+
-				'</table>';
+					'	</tr>'+
+					'</thead>';
+				html+=	'<tbody>'+_researchObjectHtml+
+				'</tbody></table>';
 				html+="</ul>";
 				$("#roList").html(html);
 			}
+			
+			/**
+			* Function that loads a research object into a row in the html variable.
+			**/
+			function loadRow(ro){
+				_researchObjectHtml+='<tr>';
+				_researchObjectHtml+='<td><a href='+ro.uri+'>'+ro.title+'</a></td>';
+				_researchObjectHtml+='<td>'+ro.agents[0].url+'</td>';
+				_researchObjectHtml+='<td>'+ro.date+'</td>';
+				_researchObjectHtml+='<td>'+ro.license+'</td>';
+				_researchObjectHtml+='</tr>';
+			}
+			
 	</script>
 
   </head>
@@ -172,7 +174,7 @@
 			<h3><span id="numberOfROs">0</span> Research Objects found:</h3>	
               
 		<div id="roList">	
-			This will be replaced with the list, later
+			Loading Research Objects...
 		</div>
        </div>
 	</div>

@@ -1,12 +1,14 @@
 LDP4RO
 ======
 Creators: Nandana Mihindukulasooriya, Daniel Garijo
+Contributors: Oscar Corcho
 
-Specification: https://docs.google.com/document/d/1mPqn0nW7u0Lo0KubexFwBpQbyhnX4Tf2SXs3n5KMrg4/edit#
+Project designed to create and browse Research Objects following the LDP protocol and using LDP4J (http://www.ldp4j.org/#/).
+The project consists on a client for easily creating ROs and a connector to handle the requests to LDP.
+This is a work in progress.
 
-TO DO: Write the specification here, or publish it in github as a web document.
+The specification for the alignment between the RO model and LDP can be accessed on the following link: https://docs.google.com/document/d/1mPqn0nW7u0Lo0KubexFwBpQbyhnX4Tf2SXs3n5KMrg4/edit#
 
-Project to create Research Objects following the LDP model and using LDP4J.
-The project will develop a client for easily creating ROs and a connector to handle the requests to LDP.
+Currently supported: Creation of simple ROs, RO description and RO browisng. A demo is available on http://purl.org/net/ldp4ro
 
-further updates will be posted here.
+Currently working on: Adding folders, handling of Zip files, improvements to the client html (see issues).

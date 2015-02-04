@@ -45,7 +45,7 @@
             <div class="navbar-header">
               <a class="navbar-brand" href="index.html">Create ROs!</a>
               <ul class="nav navbar-nav">
-				  <li><a href="#">Browse ROs</a></li>
+				  <li><a href="roVisualizer.html">Browse ROs</a></li>
                   <li><a href="about.html">About</a></li>
               </ul>
             </div>
