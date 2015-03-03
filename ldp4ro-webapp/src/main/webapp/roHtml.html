@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!--
+  /*
+ * Copyright 2012-2013 Ontology Engineering Group, Universidad Politécnica de Madrid, Spain
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ * 
+ * This page was created by Daniel Garijo.
+ */
+  -->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Browse existing Research Objects</title>
+
+	
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"/>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+			
+			$(document).ready(function() {
+				loadRO();
+			});
+
+			/**
+			* Function to load the Research Objects. 
+			**/
+			function loadRO(rouri) {
+				var ro ='http://localhost:8080/ldp4j/ldp-bc/1';//rouri;				
+				// An ajax request that requests the above URI and parses the response. 
+				$.ajax( {
+					headers: {'Accept': 'application/ld+json'},
+					//jsonp :'callback',
+					url :ro,
+					success : function(json) {
+						console.log(json);
+						//console.log("Success!. Number of ROs "+json.contains.length);
+						//$("#numberOfROs").html(json.contains.length);
+						//loadROMetadata(json.contains);
+						//iterate through the contents of the RO
+						var returnedObjects= json["@graph"];
+						var ro = new Object();
+						var agents = [];
+						for(var j=0; j<returnedObjects.length; j++){
+							if(returnedObjects[j]['@type'] instanceof Array && 
+									(returnedObjects[j]['@type'][0]=='http://www.openarchives.org/ore/terms/Aggregation') ||
+									(returnedObjects[j]['@type'][0]=='http://purl.org/wf4ever/ro#ResearchObject') ||
+									(returnedObjects[j]['@type'][0]=='http://www.w3.org/ns/ldp#Container'))
+									{
+									ro.abstract = returnedObjects[j].abstract;//
+									ro.title = returnedObjects[j].title;//
+									ro.date = returnedObjects[j].created;
+									ro.license = returnedObjects[j].license;
+									ro.uri = returnedObjects[j]['@id'];
+									ro.creator = returnedObjects[j].creator;
+									ro.aggregates = returnedObjects[j].aggregates;
+									//console.log('Found RO: '+ro.title);
+								}								//if it's an agent, add it as creator
+								if(returnedObjects[j]['@type']=='http://purl.org/dc/terms/Agent'){									
+									var ag = new Object();
+									if(returnedObjects[j].homepage)ag.url = returnedObjects[j].homepage;
+									if(returnedObjects[j].name)	ag.name = returnedObjects[j].name;
+									//console.log(ag.url+' ');
+									agents.push(ag);
+								}
+						}
+						//now that I have all the data, create the html and update it.
+						var html='<table class="col-sm-12">'+
+							'<tbody>';
+						if (typeof ro.abstract !== 'undefined' && ro.abstract !== null) {
+							html+='<tr><td>Abstract</td><td>'+ro.abstract+'</td></tr>';
+						}
+						if (typeof ro.date !== 'undefined' && ro.date !== null) {
+							html+='<tr><td>Created on</td><td>'+ro.date+'</td></tr>';
+						}
+						if (typeof ro.license !== 'undefined' && ro.license !== null) {
+							html+='<tr><td>License</td><td>'+ro.license+'</td></tr>';
+						}
+						html+='<tr><td>Aggregated resources</td><td>TO DO</td></tr>';
+						html+='<tr><td>Creators</td><td>TO DO</td></tr>';
+						html+='</tbody></table>';
+						$("#roList").html(html);
+						var rotitleAndURI = '<a href=\"'+ro.uri+'\">'+ro.title+'</a>';
+						$('#roURI').html(rotitleAndURI);
+					}
+				}); 
+			}
+			
+			/*
+			Function that updates the html variable for the table asynchronously
+			*/
+			function updateTable(){
+				var html='<table class="col-sm-12">'+
+					'<thead>'+
+					'	<tr>'+
+					'		<th data-field="id" class="col-sm-4">Title</th>'+
+					'		<th data-field="name" class="col-sm-2">Author</th>'+
+					'		<th data-field="price" class="col-sm-3">Date</th>'+
+					'		<th data-field="license" class="col-sm-3">License</th>'+
+					'	</tr>'+
+					'</thead>';
+				html+=	'<tbody>'+_researchObjectHtml+
+				'</tbody></table>';
+				html+="</ul>";
+				$("#roList").html(html);
+			}
+			
+			/**
+			* Function that loads a research object into a row in the html variable.
+			**/
+			function loadRow(ro){
+				_researchObjectHtml+='<tr>';
+				_researchObjectHtml+='<td><a href='+ro.uri+'>'+ro.title+'</a></td>';
+				_researchObjectHtml+='<td>'+ro.agents[0].url+'</td>';
+				_researchObjectHtml+='<td>'+ro.date+'</td>';
+				_researchObjectHtml+='<td>'+ro.license+'</td>';
+				_researchObjectHtml+='</tr>';
+			}
+			
+	</script>
+
+  </head>
+   <body>
+
+    <div class="container">
+      <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <a class="navbar-brand" href="index.html">Create ROs!</a>
+              <ul class="nav navbar-nav">
+				  <li><a href="#">Browse ROs</a></li>
+                  <li><a href="about.html">About</a></li>
+              </ul>
+            </div>
+        </div>
+      </nav>
+      <!--<div>        
+        <h3 class="text-muted">Browsing existing Research Objects</h3>
+      </div>-->
+	
+	<div class="panel panel-default">
+	  <div class="panel-body">
+			<h1><span id="roURI">Research Object</span></h1>	
+              
+		<div id="roList">	
+			Loading Research Objects...
+		</div>
+       </div>
+	</div>
+
+      <footer class="footer">
+        <p>&copy; Ontology Engineering Group, 2014</p>
+      </footer>
+
+    </div> <!-- /container -->
+    
+  </body>
+</html>
