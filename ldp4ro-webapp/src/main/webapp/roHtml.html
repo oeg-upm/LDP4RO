@@ -53,24 +53,56 @@
 						//$("#numberOfROs").html(json.contains.length);
 						//loadROMetadata(json.contains);
 						//iterate through the contents of the RO
-						var returnedObjects= json["@graph"];
+						var returnedObjects= json['@graph'];
 						var ro = new Object();
 						var agents = [];
+						var htmlOther = '';
 						for(var j=0; j<returnedObjects.length; j++){
 							if(returnedObjects[j]['@type'] instanceof Array && 
 									(returnedObjects[j]['@type'][0]=='http://www.openarchives.org/ore/terms/Aggregation') ||
 									(returnedObjects[j]['@type'][0]=='http://purl.org/wf4ever/ro#ResearchObject') ||
 									(returnedObjects[j]['@type'][0]=='http://www.w3.org/ns/ldp#Container'))
 									{
-									ro.abstract = returnedObjects[j].abstract;//
-									ro.title = returnedObjects[j].title;//
-									ro.date = returnedObjects[j].created;
+									var obj = returnedObjects[j];
+									for(var key in obj){
+										var attrName = key;
+										var attrValue = obj[key];
+										//console.log(attrName+','+attrValue);
+										//we iterate through the variables in order to get all of them
+										//we can retrieve the variables also doing ro.title = returnedObjects[j].title;
+										//but that way we don't capture other properties that the RO might have
+										if(key == 'abstract'){
+											ro.abstract = attrValue;
+										}else if(key == 'title'){
+											ro.title = attrValue;
+										}else if(key == 'created'){
+											ro.date = attrValue;
+										}else if(key == 'license'){
+											ro.license = attrValue;
+										}else if(key == 'creator'){
+											ro.creator = attrValue;
+										}else if(key == 'aggregates'){
+											ro.aggregates = attrValue;
+										}else if(key == '@id'){
+											ro.uri = attrValue;
+										}else if(key == '@type'){
+											ro.type = attrValue;
+											htmlOther+='<tr><td><strong>Type(s)</strong></td><td><ul>';
+											for(var k=0; k<attrValue.length; k++){
+												htmlOther+='<li><a href="'+attrValue[k]+'">'+attrValue[k]+'</a></li>';
+											}
+											htmlOther+='</ul></td></tr>';
+										}else{
+											htmlOther+='<tr><td><strong>'+attrName+'</strong></td><td><a href="'+attrValue+'">'+attrValue+'</a></td></tr>';
+										}
+									}
+									/*ro.date = returnedObjects[j].created;
 									ro.license = returnedObjects[j].license;
 									ro.uri = returnedObjects[j]['@id'];
 									ro.creator = returnedObjects[j].creator;
-									ro.aggregates = returnedObjects[j].aggregates;
+									ro.aggregates = returnedObjects[j].aggregates;*/
 									//console.log('Found RO: '+ro.title);
-								}								//if it's an agent, add it as creator
+								}//if it's an agent, add it as creator
 								if(returnedObjects[j]['@type']=='http://purl.org/dc/terms/Agent'){									
 									var ag = new Object();
 									if(returnedObjects[j].homepage)ag.url = returnedObjects[j].homepage;
@@ -82,54 +114,48 @@
 						//now that I have all the data, create the html and update it.
 						var html='<table class="col-sm-12">'+
 							'<tbody>';
+						html+='<tr><td><strong>RO URI </strong></td><td><a href="'+ro.uri+'">'+ro.uri+'</a></td></tr>';
 						if (typeof ro.abstract !== 'undefined' && ro.abstract !== null) {
-							html+='<tr><td>Abstract</td><td>'+ro.abstract+'</td></tr>';
+							html+='<tr><td><strong>Abstract</strong></td><td>'+ro.abstract+'</td></tr>';
 						}
 						if (typeof ro.date !== 'undefined' && ro.date !== null) {
-							html+='<tr><td>Created on</td><td>'+ro.date+'</td></tr>';
+							html+='<tr><td><strong>Created on</strong></td><td>'+ro.date+'</td></tr>';
 						}
 						if (typeof ro.license !== 'undefined' && ro.license !== null) {
-							html+='<tr><td>License</td><td>'+ro.license+'</td></tr>';
+							html+='<tr><td><strong>License</strong></td><td><a href="'+ro.license+'">'+ro.license+'</a></td></tr>';
 						}
-						html+='<tr><td>Aggregated resources</td><td>TO DO</td></tr>';
-						html+='<tr><td>Creators</td><td>TO DO</td></tr>';
+						if (typeof ro.aggregates !== 'undefined' && ro.aggregates !== null) {
+							html+='<tr><td><strong>Aggregated resources</strong></td><td><ul>';
+							for(var j=0; j<ro.aggregates.length; j++){
+								html+='<li><a href="'+ro.aggregates[j]+'">'+ro.aggregates[j]+'</a></li>';
+							}
+							html+='</ul></td></tr>';
+						}
+						if (typeof agents !== 'undefined' && agents !== null) {
+							html+='<tr><td><strong>Creators</strong></td><td>';
+							for(var j=0; j<agents.length; j++){
+								homepage = agents[j].url;
+								if(typeof agents[j].url == 'undefined' || agents[j].url == null){
+									homepage='';
+								}
+								name = agents[j].name;
+								if(typeof agents[j].name == 'undefined' || agents[j].name == null){
+									name='author'+j;
+								}
+								html+='<a href="'+homepage+'">'+name+'</a><br/>';								
+							}
+							html+='</td></tr>';
+						}
 						html+='</tbody></table>';
 						$("#roList").html(html);
 						var rotitleAndURI = '<a href=\"'+ro.uri+'\">'+ro.title+'</a>';
 						$('#roURI').html(rotitleAndURI);
+						
+						//html of the second table
+						var htmlOtherProperties='<table class="col-sm-12"><tbody>'+htmlOther+'</tbody></table>';
+						$('#propList').html(htmlOtherProperties);
 					}
 				}); 
-			}
-			
-			/*
-			Function that updates the html variable for the table asynchronously
-			*/
-			function updateTable(){
-				var html='<table class="col-sm-12">'+
-					'<thead>'+
-					'	<tr>'+
-					'		<th data-field="id" class="col-sm-4">Title</th>'+
-					'		<th data-field="name" class="col-sm-2">Author</th>'+
-					'		<th data-field="price" class="col-sm-3">Date</th>'+
-					'		<th data-field="license" class="col-sm-3">License</th>'+
-					'	</tr>'+
-					'</thead>';
-				html+=	'<tbody>'+_researchObjectHtml+
-				'</tbody></table>';
-				html+="</ul>";
-				$("#roList").html(html);
-			}
-			
-			/**
-			* Function that loads a research object into a row in the html variable.
-			**/
-			function loadRow(ro){
-				_researchObjectHtml+='<tr>';
-				_researchObjectHtml+='<td><a href='+ro.uri+'>'+ro.title+'</a></td>';
-				_researchObjectHtml+='<td>'+ro.agents[0].url+'</td>';
-				_researchObjectHtml+='<td>'+ro.date+'</td>';
-				_researchObjectHtml+='<td>'+ro.license+'</td>';
-				_researchObjectHtml+='</tr>';
 			}
 			
 	</script>
@@ -144,7 +170,7 @@
             <div class="navbar-header">
               <a class="navbar-brand" href="index.html">Create ROs!</a>
               <ul class="nav navbar-nav">
-				  <li><a href="#">Browse ROs</a></li>
+				  <li><a href="roVisualizer.html">Browse ROs</a></li>
                   <li><a href="about.html">About</a></li>
               </ul>
             </div>
@@ -156,16 +182,26 @@
 	
 	<div class="panel panel-default">
 	  <div class="panel-body">
-			<h1><span id="roURI">Research Object</span></h1>	
+			<h1><span id="roURI">Research Object</span></h1>
+			<br/>
               
-		<div id="roList">	
-			Loading Research Objects...
+		<div class="panel panel-primary" >
+			<div class="panel-heading">Research Object key metadata</div>
+			<div class="panel-body" id="roList">
+			Loading Research Object metadata...
+			</div>
+		</div>
+		<div class="panel panel-info" >
+			<div class="panel-heading">Other Research Object properties</div>
+			<div class="panel-body" id="propList">
+			Loading Research Object properties...
+			</div>
 		</div>
        </div>
 	</div>
 
       <footer class="footer">
-        <p>&copy; Ontology Engineering Group, 2014</p>
+        <p>&copy; Ontology Engineering Group, 2015</p>
       </footer>
 
     </div> <!-- /container -->
