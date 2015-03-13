@@ -15,4 +15,4 @@ Currently working on: Adding folders, handling of Zip files, improvements to the
 
 ###A live demo is available at http://purl.org/net/ldp4ro
 
-
+This work has been supported by the DrInventor project (http://drinventor.eu/)
