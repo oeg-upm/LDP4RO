@@ -1,0 +1,23 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+@prefix ldp4j: <http://ldp4j.org/vocab/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+
+{
+    ldp4j:server ldp4j:readOnlyProperty dcterms:created .
+}
+
+<${app.path.scheme}://${app.path.prefix}/ldp-bc/>
+    {
+       <${app.path.scheme}://${app.path.prefix}/ldp-bc/> a ldp:Container, ldp:BasicContainer;
+            dcterms:title 'Default LDP Basic Container' .
+    }
+
+<ldp4j://${app.path.prefix}/ldp-bc/>
+    {
+        <${app.path.scheme}://${app.path.prefix}/ldp-bc/> a ldp:BasicContainer;
+            ldp4j:etag "1"^^xsd:integer .
+    }

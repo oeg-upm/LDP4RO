@@ -1,3 +1,4 @@
+<%@ page import="java.net.URLEncoder" %>
 <%--
 
     Copyright (C) 2014 Ontology Engineering Group, Universidad Politécnica de Madrid (http://www.oeg-upm.net/)
@@ -63,7 +64,8 @@
               <p>
 			  The URI for your Research Object is:
 			  </p>
-			   <h3> <a href="<%= request.getAttribute("newURI")%>  "><%= request.getAttribute("newURI") %></a></h3>
+               <h4><%= request.getAttribute("newURI") %></h4>
+			   <h4>View as <a href="<%= request.getAttribute("newURI")%>">RDF</a> or <a href="./roHtml.jsp?uri=<%=URLEncoder.encode(request.getAttribute("newURI").toString())%>">HTML</a></h4>
 			  <p>Now you can</p>
 			  <ul>
                               <li><a href="">Navigate through the contents of the Research Object (TO DO)</a></li>

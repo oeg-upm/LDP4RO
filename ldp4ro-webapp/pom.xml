@@ -141,4 +141,26 @@
 		</resources>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>
+					true
+				</activeByDefault>
+			</activation>
+			<properties>
+				<ldp4j.container>http://localhost:8080/ldp4j/ldp-bc/</ldp4j.container>
+				<fileupload.dir>/home/nandana/ldp4ros/uploads</fileupload.dir>
+			</properties>
+		</profile>
+		<profile>
+			<id>stage</id>
+			<properties>
+				<ldp4j.container>http://linkeddata4.dia.fi.upm.es:8088/ldp4j/ldp-bc/</ldp4j.container>
+				<fileupload.dir>/home/nandana/ldp4ros/uploads</fileupload.dir>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>

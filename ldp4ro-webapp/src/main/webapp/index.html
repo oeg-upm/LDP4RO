@@ -139,7 +139,7 @@
 	
 	<div class="panel">
 	  <div class="panel-body">	  
-		  <form id="surveyForm" class="form-horizontal" role="form" action="form2rdf" method="post">
+		  <form id="surveyForm" class="form-horizontal" role="form" action="form2rdf" method="post" accept-charset="UTF-8">
                     
                     <div class="form-group custom-no-margin">
                       <label for="abstract">Abstract</label>
@@ -223,7 +223,22 @@
                       <div class="form-group custom-no-margin">
                           <label class="col-sm-2 custom-left" for="license">License</label>
                           <div class="col-sm-8">
-                              <input type="text" class="form-control" name="license" id="license" placeholder="Insert the URL of the license of the RO">
+
+                              <select class="form-control" name="license" id="license">
+                                  <option value="http://purl.org/NET/rdflicense/cc-by4.0">Creative Commons CC-BY 4.0</option>
+                                  <option value="http://purl.org/NET/rdflicense/cc-by-nc4.0">Creative Commons CC-BY-NC 4.0</option>
+                                  <option value="http://purl.org/NET/rdflicense/cc-by-nd4.0">Creative Commons CC-BY-ND 4.0</option>
+                                  <option value="http://purl.org/NET/rdflicense/cc-by-sa4.0">Creative Commons CC-BY-SA 4.0</option>
+                                  <option value="http://purl.org/NET/rdflicense/cc-by-nc-sa4.0">Creative Commons CC-BY-NC-SA 4.0</option>
+                                  <option value="http://purl.org/NET/rdflicense/cc-by-nc-nd4.0">Creative Commons CC-BY-NC-ND 4.0</option>
+                                  <option value="http://purl.org/NET/rdflicense/cc-zero1.0">Creative Commons CC0</option>
+                                  <option value="http://purl.org/NET/rdflicense/ARTISTIC2.0">ARTISTIC LICENSE 2.0</option>
+                                  <option value="http://purl.org/NET/rdflicense/CDDL1.0">COMMON DEVELOPMENT AND DISTRIBUTION LICENSE</option>
+                                  <option value="http://purl.org/NET/rdflicense/APACHE2.0">APACHE LICENSE 2.0</option>
+                                  <option value="http://purl.org/NET/rdflicense/GNU-LGPL3.0">GNU LESSER GENERAL PUBLIC LICENSE</option>
+                              </select>
+
+                              <!--input type="text" class="form-control" name="license" id="license" placeholder="Insert the URL of the license of the RO" -->
                           </div>
                       </div>
 

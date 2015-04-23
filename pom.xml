@@ -167,4 +167,14 @@
         <module>ldp4ro-webapp</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>ldp4j</id>
+            <modules>
+                <module>ldp4j-generic</module>
+            </modules>
+        </profile>
+
+    </profiles>
+
 </project>

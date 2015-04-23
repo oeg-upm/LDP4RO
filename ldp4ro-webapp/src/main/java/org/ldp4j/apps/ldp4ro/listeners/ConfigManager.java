@@ -45,7 +45,11 @@ public class ConfigManager implements ServletContextListener  {
 
         config = ConfigFactory.load();
 
-        logger.trace("Application Config: \n {}", config.root().render());
+        //logger.trace("Application Config: \n {}", config.root().render());
+
+        //Set the encoding to UTF-8 for handling international characters
+        System.setProperty("file.encoding", "UTF-8");
+        System.setProperty("javax.servlet.request.encoding", "UTF-8");
 
         Config appConfig = ConfigManager.getAppConfig();
         uploadDir = new File(appConfig.getString(UPLOAD_DIR));
