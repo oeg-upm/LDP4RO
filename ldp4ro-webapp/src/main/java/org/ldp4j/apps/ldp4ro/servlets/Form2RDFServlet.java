@@ -16,13 +16,16 @@
 package org.ldp4j.apps.ldp4ro.servlets;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.typesafe.config.Config;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.ldp4j.apps.ldp4ro.RoRDFModel;
+import org.ldp4j.apps.ldp4ro.listeners.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +55,9 @@ public class Form2RDFServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
+
+        request.setCharacterEncoding("UTF-8");
+
         String requestURL = request.getRequestURL().toString();
         logger.debug("Received a POST request on '{}'", requestURL);
 
@@ -68,12 +74,15 @@ public class Form2RDFServlet extends HttpServlet {
         logger.debug("Form data is converted to RDF ... \n{}", roString);
 
 
+        String containerPath = ConfigManager.getAppConfig().getString("ldp4j.container-url");
+        logger.debug("Container path is '{}'", containerPath);
         DefaultHttpClient httpclient = new DefaultHttpClient();
-        HttpPost post = new HttpPost("http://localhost:8080/ldp4j/ldp-bc/");
-        //HttpPost post = new HttpPost("http://linkeddata4.dia.fi.upm.es:8088/ldp4j/ldp-bc/");
+        HttpPost post = new HttpPost(containerPath);
 
-        StringEntity body = new StringEntity(roString);
-        body.setContentType("text/turtle");
+        ByteArrayEntity body = new ByteArrayEntity(roString.getBytes("UTF-8"));
+
+        body.setContentType("text/turtle; charset=utf-8");
+        body.setContentEncoding("UTF-8");
         post.setEntity(body);
 
         HttpResponse ldpResponse = httpclient.execute(post);

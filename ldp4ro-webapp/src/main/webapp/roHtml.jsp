@@ -42,7 +42,7 @@
 			* Function to load the Research Objects. 
 			**/
 			function loadRO(rouri) {
-				var ro ='http://localhost:8080/ldp4j/ldp-bc/1';//rouri;				
+				var ro ='<%=request.getParameter("uri")%>';//rouri;
 				// An ajax request that requests the above URI and parses the response. 
 				$.ajax( {
 					headers: {'Accept': 'application/ld+json'},

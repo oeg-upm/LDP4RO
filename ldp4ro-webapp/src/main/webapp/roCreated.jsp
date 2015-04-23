@@ -1,3 +1,24 @@
+<<<<<<< HEAD
+=======
+<%@ page import="java.net.URLEncoder" %>
+<%--
+
+    Copyright (C) 2014 Ontology Engineering Group, Universidad Politécnica de Madrid (http://www.oeg-upm.net/)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+--%>
+>>>>>>> origin/master
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +79,8 @@
               <p>
 			  The URI for your Research Object is:
 			  </p>
-			   <h3> <a href="<%= request.getAttribute("newURI")%>  "><%= request.getAttribute("newURI") %></a></h3>
+               <h4><%= request.getAttribute("newURI") %></h4>
+			   <h4>View as <a href="<%= request.getAttribute("newURI")%>">RDF</a> or <a href="./roHtml.jsp?uri=<%=URLEncoder.encode(request.getAttribute("newURI").toString())%>">HTML</a></h4>
 			  <p>Now you can</p>
 			  <ul>
                               <li><a href="roHtml">Navigate through the contents of the Research Object</a></li>
