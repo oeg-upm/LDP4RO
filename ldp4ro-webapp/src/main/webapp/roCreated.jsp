@@ -1,27 +1,23 @@
-<%--
-
-    Copyright (C) 2014 Ontology Engineering Group, Universidad Politécnica de Madrid (http://www.oeg-upm.net/)
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-            http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
---%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
   <!--
   /*
+ * Copyright 2012-2013 Ontology Engineering Group, Universidad Politécnica de Madrid, Spain
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ * 
  * This page was created by Daniel Garijo.
- * https://github.com/oeg-upm/LDP4RO/commits/master/ldp4ro-webapp/src/main/webapp/roCreated.jsp
  */
   -->
   <head>
@@ -32,7 +28,6 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/main.css">
     
 
   </head>
@@ -45,7 +40,7 @@
             <div class="navbar-header">
               <a class="navbar-brand" href="index.html">Create ROs!</a>
               <ul class="nav navbar-nav">
-				  <li><a href="roVisualizer.html">Browse ROs</a></li>
+				  <li><a href="#">Browse ROs</a></li>
                   <li><a href="about.html">About</a></li>
               </ul>
             </div>
@@ -66,7 +61,7 @@
 			   <h3> <a href="<%= request.getAttribute("newURI")%>  "><%= request.getAttribute("newURI") %></a></h3>
 			  <p>Now you can</p>
 			  <ul>
-                              <li><a href="">Navigate through the contents of the Research Object (TO DO)</a></li>
+                              <li><a href="roHtml">Navigate through the contents of the Research Object</a></li>
                               <li><a href="roVisualizer.html">Browse the full list of available Research Objects</a></li>
 			  </ul>
 			  
