@@ -27,4 +27,4 @@ echo "Copying the the LDP4ROs webapp to $TOMCAT_PATH/webapps"
 cp ../ldp4ro-webapp/target/ldp4ro-webapp-0.0.1-SNAPSHOT.war $TOMCAT_PATH/webapps/ldp4ro.war
 
 echo "Staring the server .."
-/home/nandana/servers/ldp4ro/bin/catalina.sh run
+/home/nandana/servers/ldp4ro/bin/startup-jrebel.sh run
