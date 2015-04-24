@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -66,26 +67,17 @@ public class RoRDFModel {
             }
 
 
-            String[] values = parameterMap.get(key);
 
-/*            //Fixing the encoding issue reported at https://github.com/oeg-upm/LDP4RO/issues/29
-            TODO fix the encoding problem properly
             String[] rawValues = parameterMap.get(key);
             String[] values = new String[rawValues.length];
 
             logger.trace("Processing the form parameters ...");
 
             for (int i = 0; i < rawValues.length; i++) {
-                try {
-                    values[i] = new String(rawValues[i].getBytes("ISO-8859-1"), "UTF-8");
-                    logger.trace("Original:" + key + "=" + rawValues[i]);
-                    logger.trace("Decoded:" +key + "=" + values[i]);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    //for this parameter and use the original value.
-                    values[i] = rawValues[i];
-                }
-            }*/
+                values[i] = URLDecoder.decode(rawValues[i]);
+                logger.trace("Encoded value : {}", rawValues[i]);
+                logger.trace("Decoded value : {}", values[i]);
+            }
 
             switch (element) {
                 case TITLE:
