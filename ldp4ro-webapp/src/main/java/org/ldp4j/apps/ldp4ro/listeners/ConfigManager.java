@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.File;
+import java.nio.charset.Charset;
 
 import static org.ldp4j.apps.ldp4ro.listeners.ConfigManager.ConfigParam.UPLOAD_DIR;
 
@@ -42,6 +43,14 @@ public class ConfigManager implements ServletContextListener  {
         logger.debug("ConfigManager is initializing ...");
 
         logger.debug("Loading the configuration ...");
+
+        logger.info("Java version:" + System.getProperty("java.version"));
+        logger.info("Java vendor:" + System.getProperty("java.vendor"));
+        logger.info("OS name:" + System.getProperty("os.name"));
+        logger.info("OS version:" + System.getProperty("os.version"));
+        logger.info("Username:" + System.getProperty("user.name"));
+        logger.info("Default charset:" + Charset.defaultCharset());
+
 
         config = ConfigFactory.load();
 

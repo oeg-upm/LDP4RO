@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<%@page contentType="text/html; charset=UTF-8" %>
   <!--
   /*
  * Copyright 2012-2013 Ontology Engineering Group, Universidad Politécnica de Madrid, Spain
@@ -56,7 +57,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-		    <li><a href="roVisualizer.html">Browse ROs</a></li>
+		    <li><a href="roVisualizer.jsp">Browse ROs</a></li>
             <li><a href="about.html">About</a></li>            
           </ul>
         </div>
@@ -355,8 +356,8 @@
 		//});
 		
 		//encode the values of the text in the form
-		$('input').each(function(index, element){
-			//console.log('before '+$('input')[index].value);			
+/*		$('input').each(function(index, element){
+			//console.log('before '+$('input')[index].value);
 			if($('input')[index].name ==='title' || $('input')[index].name ==='creatorName[]'){
 				$('input')[index].value = encodeURIComponent($('input')[index].value);//aux[index];
 			}
@@ -364,7 +365,7 @@
 		});
 		$('textarea').each(function(index, element){
 			$('textarea')[index].value = encodeURIComponent($('textarea')[index].value);
-		});
+		});*/
 		//console.log($('#surveyForm'));
 		//console.log($('#surveyForm').find(':visible[name="creatorName[]"]')[0].value);
         //$("#surveyForm").submit();

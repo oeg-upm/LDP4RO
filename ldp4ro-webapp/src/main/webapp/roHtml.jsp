@@ -181,9 +181,9 @@
             <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-              <a class="navbar-brand" href="index.html">Create ROs!</a>
+              <a class="navbar-brand" href="index.jsp">Create ROs!</a>
               <ul class="nav navbar-nav">
-				  <li><a href="roVisualizer.html">Browse ROs</a></li>
+				  <li><a href="roVisualizer.jsp">Browse ROs</a></li>
                   <li><a href="about.html">About</a></li>
               </ul>
             </div>

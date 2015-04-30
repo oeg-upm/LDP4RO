@@ -31,11 +31,10 @@ public class RequestListener implements ServletRequestListener {
 
         if (event.getServletRequest() instanceof HttpServletRequest) {
 
-            HttpServletRequest request = (HttpServletRequest) event.getServletRequest();
-
-            logger.trace("A '{}' request on '{}' was initialized ...", request.getMethod(), request.getRequestURL());
-
             if (!ConfigManager.isBaseURLSet()) {
+
+                HttpServletRequest request = (HttpServletRequest) event.getServletRequest();
+                logger.trace("A '{}' request on '{}' was initialized ...", request.getMethod(), request.getRequestURL());
 
                 logger.trace("Calculating the base URL of the application ...");
 

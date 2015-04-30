@@ -80,14 +80,16 @@
                 <app.path.scheme>http</app.path.scheme>
                 <app.path.prefix>localhost:8080/ldp4j</app.path.prefix>
                 <dataset.path>/home/nandana/ldp4ros/dataset</dataset.path>
+                <ro.visualizer.uri>http://localhost:8080/ldp4ro/roHtml.jsp?uri=</ro.visualizer.uri>
             </properties>
         </profile>
         <profile>
             <id>stage</id>
             <properties>
                 <app.path.scheme>http</app.path.scheme>
-                <app.path.prefix>linkeddata4.dia.fi.upm.es:8088/ldp4j</app.path.prefix>
+                <app.path.prefix>linkeddata4.dia.fi.upm.es:8089/ldp4j</app.path.prefix>
                 <dataset.path>/home/nandana/ldp4ros/dataset</dataset.path>
+                <ro.visualizer.uri>http://linkeddata4.dia.fi.upm.es:8089/ldp4ro/roHtml.jsp?uri=</ro.visualizer.uri>
             </properties>
         </profile>
     </profiles>

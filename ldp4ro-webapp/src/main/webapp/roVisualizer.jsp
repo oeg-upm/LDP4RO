@@ -15,12 +15,13 @@
     limitations under the License.
 
 -->
+<%@ page import="org.ldp4j.apps.ldp4ro.listeners.ConfigManager" %>
 <!DOCTYPE html>
 <html lang="en">
   <!--
   /*
  * This page was created by Daniel Garijo.
- * https://github.com/oeg-upm/LDP4RO/blame/master/ldp4ro-webapp/src/main/webapp/roVisualizer.html
+ * https://github.com/oeg-upm/LDP4RO/blame/master/ldp4ro-webapp/src/main/webapp/roVisualizer.jsp
  */
   -->
   <head>
@@ -46,8 +47,8 @@
 			* Thanks to Daniel Vila for his help
 			**/
 			function loadROs() {
-                                //var endpointURI ="http://linkeddata4.dia.fi.upm.es:8088/ldp4j/ldp-bc/";
-				var endpointURI ="http://localhost:8080/ldp4j/ldp-bc/";
+                var endpointURI ="<%=ConfigManager.getAppConfig().getString("ldp4j.container-url")%>";
+				//var endpointURI ="http://localhost:8080/ldp4j/ldp-bc/";
 				// An ajax request that requests the above URI and parses the response. 
 				$.ajax( {
 					//contentType: "application/ld+json",
@@ -162,7 +163,7 @@
             <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-              <a class="navbar-brand" href="index.html">Create ROs!</a>
+              <a class="navbar-brand" href="index.jsp">Create ROs!</a>
               <ul class="nav navbar-nav">
 				  <li><a href="#">Browse ROs</a></li>
                   <li><a href="about.html">About</a></li>

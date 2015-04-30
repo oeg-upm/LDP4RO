@@ -157,7 +157,7 @@
 		<profile>
 			<id>stage</id>
 			<properties>
-				<ldp4j.container>http://linkeddata4.dia.fi.upm.es:8088/ldp4j/ldp-bc/</ldp4j.container>
+				<ldp4j.container>http://linkeddata4.dia.fi.upm.es:8089/ldp4j/ldp-bc/</ldp4j.container>
 				<fileupload.dir>/home/nandana/ldp4ros/uploads</fileupload.dir>
 			</properties>
 		</profile>

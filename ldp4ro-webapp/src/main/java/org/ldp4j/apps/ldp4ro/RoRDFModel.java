@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -66,18 +67,21 @@ public class RoRDFModel {
                 continue;
             }
 
-
-
-            String[] rawValues = parameterMap.get(key);
-            String[] values = new String[rawValues.length];
+/*            String[] rawValues = parameterMap.get(key);
+            String[] values = new String[rawValues.length];*/
+            String[] values = parameterMap.get(key);
 
             logger.trace("Processing the form parameters ...");
 
-            for (int i = 0; i < rawValues.length; i++) {
-                values[i] = URLDecoder.decode(rawValues[i]);
-                logger.trace("Encoded value : {}", rawValues[i]);
-                logger.trace("Decoded value : {}", values[i]);
-            }
+/*            for (int i = 0; i < rawValues.length; i++) {
+                try {
+                    values[i] = URLDecoder.decode(rawValues[i], "utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    throw new IllegalStateException("The system doesn't support UTF-8 charset");
+                }
+                logger.trace("URL Encoded value : {}", rawValues[i]);
+                logger.trace("Decoded (UTF-8) value : {}", values[i]);
+            }*/
 
             switch (element) {
                 case TITLE:
