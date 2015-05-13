@@ -86,27 +86,46 @@
 						for(var j=0; j<returnedObjects.length; j++){
 							//if it is an RO, get the metadata. Otherwise push in the author array.
 							//since ROs are defined with 3 types, I test any of the three
-							if(returnedObjects[j]['@type'] instanceof Array && 
-								(returnedObjects[j]['@type'][0]=='ore:Aggregation') ||
-								(returnedObjects[j]['@type'][0]=='ro:ResearchObject') ||
-								(returnedObjects[j]['@type'][0]=='ldp:Container'))
-								{
-								ro.title = returnedObjects[j].title;//
-								ro.date = returnedObjects[j]['dc:created']['@value'];;
-								ro.license = returnedObjects[j].license;
-								ro.uri = returnedObjects[j]['@id'];
-								//console.log('Found RO: '+ro.title);
-							}								//if it's an agent, add it as creator
+							if(typeof returnedObjects[j]['@type'] == 'undefined' || returnedObjects[j]['@type'] == null){
+								//console.log(returnedObjects[j]);
+								//quick patch because "type" is not properly serialized sometimes
+								if(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'] instanceof Array && 
+									(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][0]=='http://www.openarchives.org/ore/terms/Aggregation') ||
+									(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][0]=='http://purl.org/wf4ever/ro#ResearchObject') ||
+									(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][0]=='http://www.w3.org/ns/ldp#DirectContainer')||
+									(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][0]=='http://www.w3.org/ns/ldp#Container'))
+									{
+										ro.title = returnedObjects[j].title;
+										if(returnedObjects[j]['dc:created']){
+											ro.date = returnedObjects[j]['dc:created'];
+										}
+										ro.license = returnedObjects[j].license;
+										ro.uri = returnedObjects[j]['@id'];
+										console.log('Found RO: '+ro.title);
+								}
+							}else
+								if(returnedObjects[j]['@type'] instanceof Array && 
+									(returnedObjects[j]['@type'][0]=='ore:Aggregation') ||
+									(returnedObjects[j]['@type'][0]=='ro:ResearchObject') ||
+									(returnedObjects[j]['@type'][0]=='ldp:Container')||
+									(returnedObjects[j]['@type'][0]=='ldp:DirectContainer'))
+									{
+									ro.title = returnedObjects[j].title;//
+									ro.date = returnedObjects[j]['dc:created']['@value'];
+									ro.license = returnedObjects[j].license;
+									ro.uri = returnedObjects[j]['@id'];
+									//console.log('Found RO: '+ro.title);
+								}								//if it's an agent, add it as creator
 							if(returnedObjects[j]['@type']=='dc:Agent'){									
 								var ag = new Object();
-								if(returnedObjects[j]['homepage'])ag.url = returnedObjects[j]['homepage'];
+								if(returnedObjects[j]['foaf:homepage'])ag.url = returnedObjects[j]['homepage'];
 								if(returnedObjects[j]['foaf:name'])	ag.name = returnedObjects[j]['foaf:name'];
-								console.log(ag.url+' ');
+								//console.log(ag.url+' ');
 								agents.push(ag);
 							}							
-							//console.log(returnedObjects[1].title);														
+								//console.log(returnedObjects[1].title);														
 						}
-						console.log(currentRO);
+						//console.log(currentRO);
 						ro.agents = agents;
 						loadRow(ro);
 						updateTable();
@@ -142,7 +161,7 @@
 			function loadRow(ro){
 				_researchObjectHtml+='<tr>';
 				_researchObjectHtml+='<td><a href='+ro.uri+'>'+ro.title+'</a></td>';
-				console.log(ro.agents);
+				//console.log(ro.agents);
 				if(ro.agents && ro.agents.length>0){
 					_researchObjectHtml+='<td>'+ro.agents[0].name+'</td>';
 				}else{
