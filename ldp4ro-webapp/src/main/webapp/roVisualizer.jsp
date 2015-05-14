@@ -86,24 +86,6 @@
 						for(var j=0; j<returnedObjects.length; j++){
 							//if it is an RO, get the metadata. Otherwise push in the author array.
 							//since ROs are defined with 3 types, I test any of the three
-							if(typeof returnedObjects[j]['@type'] == 'undefined' || returnedObjects[j]['@type'] == null){
-								//console.log(returnedObjects[j]);
-								//quick patch because "type" is not properly serialized sometimes
-								if(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'] instanceof Array && 
-									(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][0]=='http://www.openarchives.org/ore/terms/Aggregation') ||
-									(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][0]=='http://purl.org/wf4ever/ro#ResearchObject') ||
-									(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][0]=='http://www.w3.org/ns/ldp#DirectContainer')||
-									(returnedObjects[j]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][0]=='http://www.w3.org/ns/ldp#Container'))
-									{
-										ro.title = returnedObjects[j].title;
-										if(returnedObjects[j]['dc:created']){
-											ro.date = returnedObjects[j]['dc:created'];
-										}
-										ro.license = returnedObjects[j].license;
-										ro.uri = returnedObjects[j]['@id'];
-										console.log('Found RO: '+ro.title);
-								}
-							}else
 								if(returnedObjects[j]['@type'] instanceof Array && 
 									(returnedObjects[j]['@type'][0]=='ore:Aggregation') ||
 									(returnedObjects[j]['@type'][0]=='ro:ResearchObject') ||
@@ -112,8 +94,13 @@
 									{
 									ro.title = returnedObjects[j].title;//
 									ro.date = returnedObjects[j]['dc:created']['@value'];
+									if(ro.date == 'undefined' || ro.date == null){
+										ro.date = returnedObjects[j]['dc:created'];
+									}
 									ro.license = returnedObjects[j].license;
 									ro.uri = returnedObjects[j]['@id'];
+									//if the agents are not individual objects, at least get their uris
+									ro.creator = returnedObjects[j]['creator']
 									//console.log('Found RO: '+ro.title);
 								}								//if it's an agent, add it as creator
 							if(returnedObjects[j]['@type']=='dc:Agent'){									
@@ -160,15 +147,23 @@
 			**/
 			function loadRow(ro){
 				_researchObjectHtml+='<tr>';
-				_researchObjectHtml+='<td><a href='+ro.uri+'>'+ro.title+'</a></td>';
+				_researchObjectHtml+='<td><a href=\"'+ro.uri+'\">'+ro.title+'</a></td>';
 				//console.log(ro.agents);
 				if(ro.agents && ro.agents.length>0){
 					_researchObjectHtml+='<td>'+ro.agents[0].name+'</td>';
 				}else{
-					_researchObjectHtml+='<td>Undefined</td>';
+					if(ro.creator && (typeof ro.creator == 'string' || ro.creator instanceof String)){
+						_researchObjectHtml+='<td>'+ro.creator+'</td>';
+					}else{
+						if(ro.creator){
+							_researchObjectHtml+='<td>'+ro.creator[0]+'</td>';
+						}else{
+							_researchObjectHtml+='<td>Undefined</td>';
+						}
+					}
 				}
 				_researchObjectHtml+='<td>'+ro.date+'</td>';
-				_researchObjectHtml+='<td>'+ro.license+'</td>';
+				_researchObjectHtml+='<td><a href=\"'+ro.license+'\">'+ro.license+'</a></td>';
 				_researchObjectHtml+='</tr>';
 			}
 			

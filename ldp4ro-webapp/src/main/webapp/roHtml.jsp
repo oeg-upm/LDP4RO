@@ -29,6 +29,19 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"/>
+	<style>
+	#myMenu a:link {
+		color: #ffffff;
+	}
+	/* visited link grey */
+	#myMenu a:visited {
+		color: #ffffff;
+	}
+	/* mouse over link blue */
+	#myMenuu a:hover {
+		color: #ffffff;
+	}
+	</style>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	
@@ -41,6 +54,7 @@
 			/**
 			* Function to load the Research Objects. 
 			**/
+			var htmlOther;//used in getROMetadata
 			function loadRO(rouri) {
 				var ro ='<%=request.getParameter("uri")%>';//rouri;
 				// An ajax request that requests the above URI and parses the response. 
@@ -55,70 +69,25 @@
 						//loadROMetadata(json.contains);
 						//iterate through the contents of the RO
 						var returnedObjects= json['@graph'];
-						var ro = new Object();
+						var ro;
 						var agents = [];
-						var htmlOther = '';
+						htmlOther = '';
 						for(var j=0; j<returnedObjects.length; j++){
-							//console.log(returnedObjects[j]['@type']);
-							if(returnedObjects[j]['@type'] instanceof Array && 
+								if(returnedObjects[j]['@type'] instanceof Array && 
 									(returnedObjects[j]['@type'][0]=='ore:Aggregation') ||
 									(returnedObjects[j]['@type'][0]=='ro:ResearchObject') ||
-									(returnedObjects[j]['@type'][0]=='ldp:Container'))
-									{
-									var obj = returnedObjects[j];
-									for(var key in obj){
-										var attrName = key;
-										var attrValue = obj[key];
-										//console.log(attrName+','+attrValue);
-										//we iterate through the variables in order to get all of them
-										if(key == 'abstract'){
-											ro.abstract = attrValue;
-										}else if(key == 'title'){
-											ro.title = attrValue;
-										}else if(key == 'dc:created'){
-											ro.date = attrValue['@value'];
-										}else if(key == 'license'){
-											ro.license = attrValue;
-										}else if(key == 'creator'){
-											ro.creator = attrValue;
-										}else if(key == 'aggregates'){
-											ro.aggregates = attrValue;
-										}else if(key == '@id'){
-											ro.uri = attrValue;
-										}else if(key == '@type'){
-											ro.type = attrValue;
-											htmlOther+='<tr><td><strong>Type(s)</strong></td><td><ul>';
-											for(var k=0; k<attrValue.length; k++){
-												//quick fix for expanding prefixes (thetypes are always the same).
-												var aux = attrValue[k];
-												if(aux.indexOf('ldp:')>-1){
-													aux = aux.replace('ldp:','http://www.w3.org/ns/ldp#');
-												}
-												if(aux.indexOf('ro:')>-1){
-													aux = aux.replace('ro:','http://purl.org/wf4ever/ro#');
-												}
-												if(aux.indexOf('ore:')>-1){
-													aux = aux.replace('ore:','http://www.openarchives.org/ore/terms/');
-												}
-												htmlOther+='<li><a href="'+aux+'">'+aux+'</a></li>';
-											}
-											htmlOther+='</ul></td></tr>';
-										}else{
-											var aux = attrValue;
-											if(aux.indexOf('ore:')>-1){
-													aux = aux.replace('ore:','http://www.openarchives.org/ore/terms/');
-											}
-											htmlOther+='<tr><td><strong>'+attrName+'</strong></td><td><a href="'+aux+'">'+aux+'</a></td></tr>';
-										}
+									(returnedObjects[j]['@type'][0]=='ldp:Container')){
+										var obj = returnedObjects[j];
+										ro = getROMetadata(obj);
 									}
-								}//if it's an agent, add it as creator
-								if(returnedObjects[j]['@type']=='dc:Agent'){									
-									var ag = new Object();
-									if(returnedObjects[j]['homepage'])ag.url = returnedObjects[j]['homepage'];
-									if(returnedObjects[j]['foaf:name'])ag.name = returnedObjects[j]['foaf:name'];
-									//console.log(ag.url+' ');
-									agents.push(ag);
-								}
+							//if it's an agent, add it as creator
+							if(returnedObjects[j]['@type']=='dc:Agent'){									
+								var ag = new Object();
+								if(returnedObjects[j]['homepage'])ag.url = returnedObjects[j]['homepage'];
+								if(returnedObjects[j]['foaf:name'])ag.name = returnedObjects[j]['foaf:name'];
+								//console.log(ag.url+' ');
+								agents.push(ag);
+							}
 						}
 						//now that I have all the data, create the html and update it.
 						var html='<table class="col-sm-12">'+
@@ -144,7 +113,7 @@
 							}
 							html+='</ul></td></tr>';
 						}
-						if (agents) {
+						if (agents && agents.length>0) {
 							html+='<tr><td><strong>Creators</strong></td><td>';
 							for(var j=0; j<agents.length; j++){
 								homepage = agents[j].url;
@@ -169,6 +138,93 @@
 						$('#propList').html(htmlOtherProperties);
 					}
 				}); 
+			}
+			
+			function getROMetadata(obj){
+				ro = new Object();
+				for(var key in obj){
+					var attrName = key;
+					var attrValue = obj[key];
+					//console.log(attrName+','+attrValue);
+					//we iterate through the variables in order to get all of them
+					if(key == 'abstract'){
+						ro.abstract = attrValue;
+					}else if(key == 'title'){
+						ro.title = attrValue;
+					}else if(key == 'dc:created'){
+						ro.date = attrValue['@value'];
+						if(ro.date == 'undefined' || ro.date == null){
+							ro.date = attrValue;
+						}
+					}else if(key == 'license'){
+						ro.license = attrValue;
+					}else if(key == 'creator'){
+						ro.creator = attrValue;
+					}else if(key == 'aggregates'){
+						ro.aggregates = attrValue;
+					}else if(key == '@id'){
+						ro.uri = attrValue;
+					}else if(key == '@type'){
+						ro.type = attrValue;
+						htmlOther+='<tr><td><strong>Type(s)</strong></td><td><ul>';
+						for(var k=0; k<attrValue.length; k++){
+							//quick fix for expanding prefixes (the types are always the same).
+							//console.log(aux);
+							var aux = attrValue[k];
+							if((typeof aux == 'string' || aux instanceof String) && aux.indexOf('ldp:')>-1){
+								aux = aux.replace('ldp:','http://www.w3.org/ns/ldp#');
+							}
+							if((typeof aux == 'string' || aux instanceof String) && aux.indexOf('ro:')>-1){
+								aux = aux.replace('ro:','http://purl.org/wf4ever/ro#');
+							}
+							if((typeof aux == 'string' || aux instanceof String) && aux.indexOf('ore:')>-1){
+								aux = aux.replace('ore:','http://www.openarchives.org/ore/terms/');
+							}
+							htmlOther+='<li><a href="'+aux+'">'+aux+'</a></li>';
+						}
+						htmlOther+='</ul></td></tr>';
+					}else{
+						var aux = attrValue;
+						//console.log(aux);
+						if((typeof aux == 'string' || aux instanceof String) && aux.indexOf('ore:')>-1){
+							aux = aux.replace('ore:','http://www.openarchives.org/ore/terms/');
+						}
+						if(aux instanceof Array){
+							htmlOther+='<tr><td><strong>'+attrName+'</strong></td><td><ul>';
+							for(var m=0; m<aux.length; m++){
+								var aux2 = aux[m];
+								if(typeof aux2 == 'string' || aux2 instanceof String){
+									htmlOther+='<li>'+aux2+'</li>';
+								}else{
+									htmlOther+='<li>'+aux2['@id']+'</li>';//filter to remove [object] (schema:creator is special)
+								}
+							}
+							htmlOther+='</ul></td></tr>';
+						}else{
+							if(typeof aux == 'string' || aux instanceof String){
+								htmlOther+='<tr><td><strong>'+attrName+'</strong></td><td><a href="'+aux+'">'+aux+'</a></td></tr>';
+							}							
+						}
+						
+					}
+				}
+				return ro;
+			}
+			function getRDF(){
+				//alert('you should be getting the rdf');
+				var rdf = $.get('<%=request.getParameter("uri")%>'
+					,"text/turtle").fail(function() {
+							alert( "Error while downloading the RDF" );
+					  }).done(function(data) {
+						//console.log( data );
+						var newWindow = window.open("", "RDF Download");
+						newWindow.document.write(data);
+					  });
+							/*console.log (rdf['responseText']);
+						  var newWindow = window.open("", "RDF Download");
+						  newWindow.document.write(rdf['responseText']);*/
+						//});
+				console.log(rdf);
 			}
 			
 	</script>
@@ -199,7 +255,7 @@
 			<br/>
               
 		<div class="panel panel-primary" >
-			<div class="panel-heading">Research Object key metadata</div>
+			<div class="panel-heading" id="myMenu">Research Object key metadata <a href="#" onclick="getRDF()" class="pull-right">Download RDF</a></div><!--<img src="rdf.gif" height="33" width="33"></img></a></div>-- class="pull-right" -->
 			<div class="panel-body" id="roList">
 			Loading Research Object metadata...
 			</div>
