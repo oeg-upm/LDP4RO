@@ -72,6 +72,7 @@
         <typesafe.config.version>1.2.1</typesafe.config.version>
         <jetty.version>9.2.3.v20140905</jetty.version>
         <mycila.plugin.version>2.8</mycila.plugin.version>
+        <elasticsearch.version>1.5.1</elasticsearch.version>
     </properties>
 
     <dependencyManagement>
@@ -111,6 +112,11 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

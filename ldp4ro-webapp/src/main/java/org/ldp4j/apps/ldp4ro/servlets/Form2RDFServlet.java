@@ -25,6 +25,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.ldp4j.apps.ldp4ro.RoRDFModel;
+import org.ldp4j.apps.ldp4ro.elasticsearch.ESClient;
 import org.ldp4j.apps.ldp4ro.listeners.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +88,7 @@ public class Form2RDFServlet extends HttpServlet {
 
         HttpResponse ldpResponse = httpclient.execute(post);
 
+        ESClient esClient = null;
         try {
             int statusCode = ldpResponse.getStatusLine().getStatusCode();
             logger.debug("LDP server responded with {} {}", statusCode,
@@ -95,6 +97,9 @@ public class Form2RDFServlet extends HttpServlet {
             if(statusCode == 201 && ldpResponse.getFirstHeader("Location") != null) {
                 String location = ldpResponse.getFirstHeader("Location").getValue();
                 logger.debug("URI of the newly created LDPR - {}", location);
+
+                esClient = new ESClient("127.0.0.1", 9300, "elasticsearch");
+                esClient.index("roindex", "ro", esClient.createIndex(ro, location));
 
                 request.setAttribute("newURI", location);
 
@@ -108,6 +113,9 @@ public class Form2RDFServlet extends HttpServlet {
 
         } finally {
             post.releaseConnection();
+            if(esClient != null){
+                esClient.close();
+            }
         }
 
     }

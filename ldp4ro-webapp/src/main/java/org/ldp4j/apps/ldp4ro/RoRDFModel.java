@@ -46,9 +46,13 @@ public class RoRDFModel {
 
     Map<String, String[]> parameterMap;
 
-    String[] authorNames;
+    String[] authorNames = {};
 
     String[] authorURIs;
+
+    String title;
+
+    String abstract_;
 
     public RoRDFModel(Map<String, String[]> parameterMap) {
         this.parameterMap = parameterMap;
@@ -155,6 +159,7 @@ public class RoRDFModel {
             throw new IllegalArgumentException("There must exactly one title. Multiple titles found.");
         }
 
+        this.title = title[0];
         ro.addProperty(DCTerms.title, title[0]);
 
     }
@@ -162,6 +167,7 @@ public class RoRDFModel {
     private void generateAbstract(String[] abstract_) {
         if (abstract_.length > 0) {
             ro.addProperty(DCTerms.abstract_, abstract_[0]);
+            this.abstract_ = abstract_[0];
         }
     }
 
@@ -208,5 +214,15 @@ public class RoRDFModel {
         }
     }
 
+    public String getTitle() {
+        return title;
+    }
 
+    public String getAbstract() {
+        return abstract_;
+    }
+
+    public String[] getAuthorNames() {
+        return authorNames;
+    }
 }
