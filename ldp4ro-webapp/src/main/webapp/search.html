@@ -1,0 +1,157 @@
+<!--
+
+    Copyright (C) 2014 Ontology Engineering Group, Universidad Politécnica de Madrid (http://www.oeg-upm.net/)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <!--
+  /*
+ * This page was created by Daniel Garijo.
+ * https://github.com/oeg-upm/LDP4RO/commits/master/ldp4ro-webapp/src/main/webapp/Search ROs.html
+ */
+  -->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search ROs</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	
+    <script type="text/javascript">
+	
+			function searchROs(){
+				//console.log($('#searchBar').val());
+				var searchValue = $('#searchBar').val();
+				var j = {'query': {
+						   'dis_max': {
+							   'queries': [
+								   { 'match': {'title': searchValue }},
+								   { 'match': {'abstract': searchValue }},
+								   { 'match': {'authors': searchValue }}
+							   ]
+						   }
+					   }
+					};
+				var urlp = 'http://linkeddata4.dia.fi.upm.es:8089/ldp4ro/es/roindex/ro/_search';
+				//console.log(j);
+				$.ajax({
+				  url: urlp,
+				  type: 'POST',				  
+				  data: JSON.stringify(j),
+				  success: function(data, textStatus, jqXHR)
+					{
+						//console.log(data);
+						var html='';
+						//data - response from server
+						var hits = data['hits']['hits'];
+						//console.log(hits);
+						for(var m=0; m<hits.length; m++){
+							var ro = hits[m]['_source'];
+							//console.log(ro);
+							html+='<tr><td><a href=\"'+ro['uri']+'\">'+ro['title']+'</a></td>';
+							html+='<td>'+ro['authors'][0]+'</td>';
+							html+='<td>'+ro['abstract']+'</td></tr>';
+							//console.log(html);
+						}
+						updateTable(html);
+					},
+					error: function (jqXHR, textStatus, errorThrown)
+					{
+						alert("Error while Attempting to search the RO" );
+					}
+				});
+			}
+			function updateTable(researchObjectHtml){
+				var html = '<h3 class="text-muted">Search results</h3>';
+				if(researchObjectHtml == ''){
+					html+='<p>No Research Objects found</p>';
+				}
+				else{
+					html+='<table class="col-sm-12">'+
+						'<thead>'+
+						'	<tr>'+
+						'		<th data-field="id" class="col-sm-5">Title</th>'+
+						'		<th data-field="name" class="col-sm-3">Author</th>'+
+						'		<th data-field="price" class="col-sm-4">Abstract</th>'+
+						'	</tr>'+
+						'</thead>';
+					//console.log(researchObjectHtml);
+					html+=	'<tbody>'+researchObjectHtml+
+					'</tbody></table>';
+				}
+				$("#roList").html(html);
+			}
+			
+	</script>
+  </head>
+   <body>
+
+    <div class="container">
+      <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <a class="navbar-brand" href="index.jsp">Create ROs!</a>
+              <ul class="nav navbar-nav">
+				  <li><a href="roVisualizer.jsp">Browse ROs</a></li>
+                  <li><a href="#">Search ROs</a></li>
+				  <li><a href="about.html">About</a></li>
+              </ul>
+            </div>
+        </div>
+      </nav>
+      <div>        
+        <h3 class="text-muted">Search ROs</h3>
+		<p>
+		Here you can search Research Objects by their title, abstract or authors.
+		</p>
+      </div>
+	
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="input-group">
+			  <input type="text" class="form-control" placeholder="Add some text here (author, title, abstract)..." id="searchBar">
+			  <span class="input-group-btn">
+				<button class="btn btn-default" type="button" onclick="searchROs()">Search!</button>
+			  </span>			  
+			</div>
+			<!-- /input-group
+		    <div id="the-basics">
+			  <input type="text" placeholder="Add some text here" id="searchBar">
+			</div>
+			 <a href="#" onclick="searchROs()" >Search!!</a>-->
+			 <div id="roList">	
+				
+			 </div>
+		</div>
+	</div>
+
+      <footer class="footer">
+        <p>&copy; Ontology Engineering Group, 2014</p>
+      </footer>
+	  
+	<!--  <script type="text/javascript" src="js/handlebars.runtime-v3.0.3.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/typeahead.bundle.js"></script> 
+	<script type="text/javascript" src="js/bloodhound.js"></script> -->
+
+    </div> <!-- /container -->
+    
+  </body>
+</html>

@@ -180,6 +180,7 @@
               <a class="navbar-brand" href="index.jsp">Create ROs!</a>
               <ul class="nav navbar-nav">
 				  <li><a href="#">Browse ROs</a></li>
+				  <li><a href="search.html">Search ROs</a></li>
                   <li><a href="about.html">About</a></li>
               </ul>
             </div>
