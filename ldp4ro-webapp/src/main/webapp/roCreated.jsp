@@ -1,5 +1,6 @@
 <%@ page import="java.net.URLEncoder" %>
-<%--
+<!--
+  /*
 
     Copyright (C) 2014 Ontology Engineering Group, Universidad Politécnica de Madrid (http://www.oeg-upm.net/)
 
@@ -14,7 +15,7 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
+*/
 --%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
@@ -27,7 +28,21 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+	function viewAsRDF(){
+		//alert('you should be getting the rdf');
+		var rdf = $.get('<%= request.getAttribute("newURI") %>'
+			,"text/turtle").fail(function() {
+					alert( "Error while downloading the RDF" );
+			  }).done(function(data) {
+				//console.log( data );
+				var newWindow = window.open("", "RDF Download");
+				newWindow.document.write(data);
+			  });
+		//console.log(rdf);
+	}
+	</script>
 
   </head>
    <body>
@@ -40,6 +55,7 @@
               <a class="navbar-brand" href="index.jsp">Create ROs!</a>
               <ul class="nav navbar-nav">
 				  <li><a href="roVisualizer.jsp">Browse ROs</a></li>
+				  <li><a href="search.html">Search ROs</a></li>
                   <li><a href="about.html">About</a></li>
               </ul>
             </div>
@@ -58,11 +74,12 @@
 			  The URI for your Research Object is:
 			  </p>
                <h4><%= request.getAttribute("newURI") %></h4>
-			   <h4>View as <a href="<%= request.getAttribute("newURI")%>">RDF</a> or <a href="./roHtml.jsp?uri=<%=URLEncoder.encode(request.getAttribute("newURI").toString())%>">HTML</a></h4>
+			   <h4>View as <a href="#" onclick="viewAsRDF()">RDF</a> or <a href="./roHtml.jsp?uri=<%=URLEncoder.encode(request.getAttribute("newURI").toString())%>">HTML</a></h4>
 			  <p>Now you can</p>
 			  <ul>
-                              <li><a href="roHtml">Navigate through the contents of the Research Object</a></li>
-                              <li><a href="roVisualizer.jsp">Browse the full list of available Research Objects</a></li>
+				  <li><a href="roHtml">Navigate through the contents of the Research Object</a></li>
+				  <li><a href="search.html">Search Research Objects</a></li>
+				  <li><a href="roVisualizer.jsp">Browse the full list of available Research Objects</a></li>
 			  </ul>
 			  
       </div>
