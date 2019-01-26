@@ -62,7 +62,7 @@
 
     <properties>
         <jena.version>2.12.1</jena.version>
-        <commons.fileupload.version>1.3.1</commons.fileupload.version>
+        <commons.fileupload.version>1.4</commons.fileupload.version>
         <commons.httpclient.version>3.1</commons.httpclient.version>
         <commons.io.version>2.4</commons.io.version>
         <servlet.version>3.0.1</servlet.version>
