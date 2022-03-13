@@ -13,6 +13,8 @@ Currently supported: Creation of simple ROs, RO description and RO browisng.
 
 Currently working on: Adding folders, handling of Zip files, improvements to the client html (see issues).
 
-###A live demo is available at http://purl.org/net/ldp4ro
+### Demo 
+
+A live demo is available at http://purl.org/net/ldp4ro
 
 This work has been supported by the DrInventor project (http://drinventor.eu/)
